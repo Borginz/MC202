@@ -30,3 +30,40 @@ Função para ler a matriz:
 
 Função para verificar cada matriz com os numeros:
 */
+#include<stdio.h>
+#define MAX 1000
+
+void ler_matriz(int matriz[][60], int m){
+    int i,j;
+
+    for ( i = 0; i < m; i++)
+        for ( j = 0; j < 60; j++)
+        scanf("%d ", &matriz[i][j]);
+}
+
+void contar_acertos(int matriz[][60], int m, int jogadores[MAX], int numeros[6]){
+    int contador = 0, i, j, k;
+    for ( i = 0; i < m; i++){
+        
+        for (k = 0; k < 6; k++){
+            if ( matriz[i][j] == 1 && j+1 == numeros[k]){
+                contador += 1;
+            }
+        }
+        jogadores[i] = contador;
+        contador = 0;
+
+    }
+    
+
+}
+
+int main(){
+    int m, matriz[MAX][60],jogadores[m],numeros[6];
+    double n;
+
+    ler_matriz(matriz, m);
+    contar_acertos(matriz,m,jogadores,numeros);
+    imprimir_dinheiro(jogadores,n);
+    scanf("%d %lf ", &m,&n);
+}
