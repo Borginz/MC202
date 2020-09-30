@@ -22,24 +22,26 @@ int main(){
         {
         case '1':
             scanf("%d", &j);
-            printf("%", procura_novo_na_turma(t, n, j).nome);
+            printf("%s", procura_novo_na_turma(t, n, j).nome);
             break;
-        case /* constant-expression */:
+        case '2':
+            scanf("%d", &j);
+            printf("%s", procura_velho_na_turma(t, n, j).nome);
+            break;
+        case '3':
+            prinft("%s", procura_velho_todas_turmas(t, n).nome);
+            break;
+        case '4':
+            printf("%s", procura_novo_todas_turmas(t, n).sobrenome);
+            break;
+        case '5':
+            char s[5];
+            scanf("%s", &s);
+            break;
+        case '6':
             /* code */
             break;
-        case /* constant-expression */:
-            /* code */
-            break;
-        case /* constant-expression */:
-            /* code */
-            break;
-        case /* constant-expression */:
-            /* code */
-            break;
-        case /* constant-expression */:
-            /* code */
-            break;
-        case /* constant-expression */:
+        case '7':
             /* code */
             break;
 

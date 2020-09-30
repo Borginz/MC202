@@ -123,3 +123,5 @@ int remove_aluno(Turma t[], int j){
     return t[j].qtd;
 
 }
+
+int conta_substrings(Turma t[], int qtd_turmas, char *padrao);
