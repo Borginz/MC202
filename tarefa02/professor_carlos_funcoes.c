@@ -107,3 +107,15 @@ Aluno procura_velho_todas_turmas(Turma t[], int qtd_turmas){
     }
     return velho;
 }
+
+
+int add_aluno(Turma t[], Aluno A, int j){
+    t[j].alunos[t[j].qtd] = A;
+    t[j].qtd += 1;
+    return t[j].qtd;
+
+}
+
+int remove_aluno(Turma t[], int j){
+    
+}
