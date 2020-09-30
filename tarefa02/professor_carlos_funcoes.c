@@ -1,13 +1,50 @@
 #include <stdio.h>
 #include "professor_carlos.h"
 
+int pegar_tamanho(char palavra[]){
+    for(int i = 0; palavra[i] != '\0';i++)    
+     return i;
+}
+
+
 int comparar_nome( char nome[], char nome_comp[]){
-    int id = 0;
-    // função para pegar os lens 
-    // comparações
+    int tam_1 = pegar_tamanho(nome);
+    int tam_2 = pegar_tamanho(nome_comp);
+    int max;
+    if ( tam_1 < tam_2){
+        max = tam_1;
+    } else if ( tam_1 > tam_2){
+        max = tam_2;
+    } else{
+        max = tam_2;
+    }
+    
+    for (int i = 0; i < max; i++){
+        if (nome[i] < nome_comp[i]){
+            return -1;
+        } else if ( nome[i] > nome_comp[i]){
+            return 1;
+        } else if (nome[i] == nome_comp[i] && i == max-1){
+            return 0;     
+        }
+
+        
+    }
+}
+    
+int comparar(char padrao[], char nome[] ){
+// vou comparar o nome de todos os alunos com o padrao
+    for (int j = 0; padrao[j] != '\0'; j++){
+        if ( nome[j] == '\0' || ( nome[j] && padrao[j] != padrao[0])){
+            return 0;
+        }      
+    } 
+    return 1;
 
 
 }
+
+
 // Retorno 1 se o primeiro parametro for mais velho que o segundo
 // -1 se mais novo 
 // 0 se igual
@@ -124,4 +161,11 @@ int remove_aluno(Turma t[], int j){
 
 }
 
-int conta_substrings(Turma t[], int qtd_turmas, char *padrao);
+int conta_substrings(Turma t[], int qtd_turmas, char *padrao){
+    int contador = 0;
+    for ( int i = 0; i < qtd_turmas; i++){
+        for ( int j = 0; j < t[i].qtd; j++){
+            contador+= comparar(padrao, t[j].alunos[i].nome);
+        }
+    } return contador;
+}
