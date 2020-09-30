@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include "professor_carlos.h"
 
-int comparar_nome(char velho_nome, char nome_comp){
+int comparar_nome( char nome[], char nome_comp[]){
     int id = 0;
-    // Segue as regras da comparar_idade
+    // função para pegar os lens 
+    // comparações
 
 
 }
@@ -62,6 +63,7 @@ Aluno procura_novo_na_turma(Turma t[], int qtd_turmas, int j){
             novo = aluno_comp;
         } 
     }
+    return novo;
 }
 
 
@@ -76,13 +78,13 @@ Aluno procura_velho_na_turma(Turma t[], int qtd_turmas, int j){
             velho = aluno_comp;
         }
 
-    }
+    } 
 }
 
 Aluno procura_novo_todas_turmas(Turma t[], int qtd_turmas){
     Aluno novo, aluno_comp;
     novo = procura_novo_na_turma(t, qtd_turmas, 0);
-    for ( int j = 0; j < qtd_turmas; j++){
+    for ( int j = 1; j < qtd_turmas; j++){
         aluno_comp = procura_novo_na_turma(t, qtd_turmas, j);
         if ( comparar_idade(novo, aluno_comp) == 1){
             novo = aluno_comp;
@@ -98,7 +100,7 @@ Aluno procura_novo_todas_turmas(Turma t[], int qtd_turmas){
 Aluno procura_velho_todas_turmas(Turma t[], int qtd_turmas){
     Aluno velho, aluno_comp;
     velho = procura_velho_na_turma(t, qtd_turmas, 0);
-    for ( int j = 0; j < qtd_turmas; j++){
+    for ( int j = 1; j < qtd_turmas; j++){
         aluno_comp = procura_velho_na_turma(t, qtd_turmas, j);
         if ( comparar_idade(velho, aluno_comp) == -1){
             velho = aluno_comp;
@@ -117,5 +119,7 @@ int add_aluno(Turma t[], Aluno A, int j){
 }
 
 int remove_aluno(Turma t[], int j){
-    
+    t[j].qtd-=1;
+    return t[j].qtd;
+
 }
