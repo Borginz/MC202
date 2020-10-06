@@ -11,35 +11,50 @@
 */
 void ler_dados();
 
-double **aloca_matriz(int n, int m){
-    double **dados;  
-    dados = malloc(n * sizeof (double *));
+char **aloca_matriz_char( char **matriz ,int n, int m){
+    char **matriz; 
+    matriz = malloc(n * sizeof (char *));
     for ( int i = 0; i < n; i++)
-        dados[i] = malloc( m * sizeof(double));
-     return dados;    
+        matriz[i] = malloc( m * sizeof(char));
+     return matriz;    
+}
+
+double **aloca_matriz_int( double **matriz ,int n, int m){
+    double **matriz; 
+    matriz = malloc(n * sizeof (double *));
+    for ( int i = 0; i < n; i++)
+        matriz[i] = malloc( m * sizeof(double));
+     return matriz;    
 }
 
 
 int main (){
     int n, m;
-    double **dados;
-    char *nomes;
-
-    dados = aloca_matriz(n, m);
-    nomes = malloc( 25 * sizeof(char));
-    
-
-
+    double **dados, **estatisticas;
+    char **nomes;
 
     scanf(" %d%d", &n, &m);
-
     
     
+    dados = aloca_matriz_int(dados,n, m);
+    nomes = aloca_matriz_char(nomes,n,25);
     for ( int i = 0; i < n; i ++){
+        scanf("%s", &nomes[i]);
         for ( int j = 0; j < m; j ++){
             scanf("%lf", &dados[n][m]);
         }
     }
+    
+    estatisticas = aloca_matriz(estatisticas,n,4);
+
+
+
+
+    
+
+    
+    
+    
     
     
 
