@@ -8,7 +8,6 @@ int pegar_tamanho(char palavra[]){
     }   
     return len; 
     
-
 }
 
 
