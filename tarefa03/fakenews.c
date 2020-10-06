@@ -9,18 +9,86 @@
 - For calculando cada um dos termos, armanezar
 - Vetor de inteiros analisando a condição
 */
+int ** aloca_matriz_int(int n, int m){
+    int **matriz;
+    matriz = malloc(n * sizeof (int *));
+    for ( int i = 0; i < n; i++)
+        matriz[i] = malloc( m * sizeof(int));
+    return matriz;
+}
+
+double calcular_desvpad(double *dados, int m, double media){
+    double soma = 0, desvpad;
+    for ( int i = 0; i < m; i++){
+        soma += (dados[i]-media)*(dados[i]-media);
+    } 
+    desvpad = sqrt((soma/m));
+    return desvpad;
+
+}
+
+double calcular_med( double *dados, int m){
+    double media = 0;
+    for ( int i = 0; i < m; i++){
+        media += dados[i]/m;
+    }
+    return media;
+
+}
+
+double calcular_min( double *dados, int m){
+    double minimo;
+    minimo = dados[0];
+    for ( int i = 1; i < m; i++){
+        if ( minimo > dados[i]){
+            minimo = dados[i];
+        }
+    }
+    return minimo;
+}
+
+
 double calcular_maximo( double *dados, int m){
     double maximo;
     maximo = dados[0];
-    for 
+    for ( int i = 1; i < m; i++){
+        if (maximo < dados[i]){
+            maximo = dados[i];
+        }
+
+    }
+    return maximo;
 }
 
 int calcular_stats(double *dados, int m){
     // calculo as coisas 
-    // retorno de 0 a 5 identificando 
+    // 0 = Bot -- 1 = surpreendente -- 2 = normal 
+    // 3 = local -- 4 = irrelevante 
     double max, min, media, desvpad;
+    int identificador;
     max = calcular_maximo(dados, m);
+    printf("%.2lf", max);
+    min = calcular_min(dados, m);
+    printf("%.2lf", min);
+    media = calcular_med(dados, m);
+    printf("%.2lf", media);
+    desvpad = calcular_desvpad(dados,m,media);
+    printf("%.2lf\n", desvpad);
+    printf("\n");
 
+    if ((media >= 60) && ( desvpad > 15)){
+        identificador = 0;
+    } else if ((media < 60) && (desvpad <= 15)){
+        identificador = 1;
+    } else if ((media < 60) && (max >= 80) && (min > 20)){
+        identificador = 2;     
+    } else if ((media < 60) && (max >= 80) && (min <= 20)){
+        identificador = 3;
+    } else if ((media < 60) && (max < 80)){
+        identificador = 4;
+    }
+
+    return identificador;
 }
 
 char ** aloca_matriz_char(int n, int m){ 
@@ -41,7 +109,7 @@ double ** aloca_matriz_double(int n, int m){
 
 
 int main (){
-    int n, m, categoria, m_categoria;
+    int n, m, categoria, **m_categoria;
     double **dados;
     char **nomes;
 
@@ -50,6 +118,7 @@ int main (){
     
     dados = aloca_matriz_double(n, m);
     nomes = aloca_matriz_char(n,25);
+    m_categoria = aloca_matriz_int(n,n);
     
     for ( int i = 0; i < n; i ++){
         scanf("%s", nomes[i]);
@@ -64,6 +133,7 @@ int main (){
         m_categoria[categoria] = i;
 
     }
+
     
     
 
