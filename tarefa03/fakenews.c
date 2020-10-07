@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
+#include<assert.h>
 /*
 - Recebe o N e o M na primeira linha
 - Faz um for que le linhas referentes aos nomes e colunas sobre os dados
@@ -32,9 +34,14 @@ void liberar_matriz_char(char **m_categoria, int n){
 
  }
 
- void imprimir_nomes(int *m_categoria, int contadora, char **nomes){
-     for ( int i = 0; i < contadora; i++){
-         printf(" %s", nomes[m_categoria[i]]);
+ void imprimir_nomes(int *m_categoria, int tamanho, char **nomes){
+     for ( int i = 0; i < tamanho; i++){
+         if ( strcmp(nomes[m_categoria[i]], "AlexandriaOcasioCortez") == 0){
+             printf("achamos\n");
+        }
+        printf(" %s", nomes[m_categoria[i]]);
+
+         
      }
      printf("\n");
 
@@ -70,13 +77,9 @@ int procurar_idx(int **m_categoria,int categoria, int m){
 
 int ** aloca_matriz_int(int n, int m){
     int **matriz;
-    matriz = malloc(n * sizeof (int *));
-    for ( int i = 0; i < n; i++)
-        matriz[i] = malloc( m * sizeof(int));
+    matriz = malloc((n+10) * sizeof (int *));
     for ( int i = 0; i < n; i++){
-        for ( int j = 0; j < m; j++){
-            matriz[i][j] = -1;
-        }
+        matriz[i] = malloc( (m+10) * sizeof(int));
     }
     return matriz;
 }
@@ -147,9 +150,11 @@ int calcular_stats(double *dados, int m){
         identificador = 2;     
     } else if ((media < 60) && (max >= 80) && (min <= 20)){
         identificador = 3;
-    } else if ((media < 60) && (max < 80)){
+    } else /*if ((media < 60) && (max < 80))*/{
         identificador = 4;
-    }
+    } 
+        
+    
 
     return identificador;
 }
@@ -172,15 +177,18 @@ double ** aloca_matriz_double(int n, int m){
 
 
 int main (){
-    int idx ,n, m, categoria, **m_categoria;
+    int idx ,n, m, categoria, **m_categoria, *vetor_tamanhos;
     double **dados;
     char **nomes;
 
-    scanf(" %d%d", &n, &m);
+    scanf("%d%d", &n, &m);
     
-    
+    vetor_tamanhos = malloc(5*sizeof(int));
+    for ( int i = 0; i < 5; i++){
+        vetor_tamanhos[i] = 0;
+    }
     dados = aloca_matriz_double(n, m);
-    nomes = aloca_matriz_char(n,25);
+    nomes = aloca_matriz_char(n,30);
     m_categoria = aloca_matriz_int(5,n);
     
     for ( int i = 0; i < n; i ++){
@@ -194,35 +202,35 @@ int main (){
     for ( int i = 0; i < n; i++){
         printf("%s ", nomes[i]);
         categoria = calcular_stats(dados[i], m);
-        idx = procurar_idx(m_categoria,categoria,m);
-        m_categoria[categoria][idx] = i;
+        assert (vetor_tamanhos[categoria] < n);
+        idx = vetor_tamanhos[categoria];
+        m_categoria[categoria][idx] = i; 
+        vetor_tamanhos[categoria]++;
     }
 
 
     printf("\nRESULTADO:\n");
     for ( int i = 0; i < 5; i++){
-        int contadora = contar_nomes(m_categoria[i], n);
+        int size = vetor_tamanhos[i];
         if ( i == 0){
-            printf("Bot (%d):", contadora);
+            printf("Bot (%d):", size);
         } else if ( i == 1){
-            printf("Surpreendente (%d):", contadora);
+            printf("Surpreendente (%d):", size);
         } else if ( i == 2){
-            printf("Normal (%d):", contadora);
+            printf("Normal (%d):", size);
         } else if ( i == 3){
-            printf("Local (%d):", contadora);
+            printf("Local (%d):", size);
         } else if ( i == 4){
-            printf("Irrelevante (%d):", contadora);
+            printf("Irrelevante (%d):", size);
         }
         
-        imprimir_nomes(m_categoria[i], contadora, nomes);
-
+        imprimir_nomes(m_categoria[i], size, nomes);
     }
-    //teste
 
     liberar_matriz_int(m_categoria,5);
     liberar_matriz_char(nomes,n);
     liberar_matriz_double(dados,n);
-    
+    free(vetor_tamanhos);
     
     
 
