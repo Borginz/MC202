@@ -9,6 +9,29 @@
 - For calculando cada um dos termos, armanezar
 - Vetor de inteiros analisando a condição
 */
+
+ void liberar_matriz_int(int **m_categoria, int n){
+     for ( int i = 0; i < n; i++){
+         free(m_categoria[i]);
+     }
+     free(m_categoria);
+
+ }
+void liberar_matriz_char(char **m_categoria, int n){
+     for ( int i = 0; i < n; i++){
+         free(m_categoria[i]);
+     }
+     free(m_categoria);
+
+ }
+ void liberar_matriz_double(double **m_categoria, int n){
+     for ( int i = 0; i < n; i++){
+         free(m_categoria[i]);
+     }
+     free(m_categoria);
+
+ }
+
  void imprimir_nomes(int *m_categoria, int contadora, char **nomes){
      for ( int i = 0; i < contadora; i++){
          printf(" %s", nomes[m_categoria[i]]);
@@ -192,6 +215,10 @@ int main (){
         imprimir_nomes(m_categoria[i], contadora, nomes);
 
     }
+
+    liberar_matriz_int(m_categoria,5);
+    liberar_matriz_char(nomes,n);
+    liberar_matriz_double(dados,n);
     
     
     
