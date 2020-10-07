@@ -214,6 +214,7 @@ int main (){
         imprimir_nomes(m_categoria[i], contadora, nomes);
 
     }
+    //teste
 
     liberar_matriz_int(m_categoria,5);
     liberar_matriz_char(nomes,n);
