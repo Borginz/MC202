@@ -215,9 +215,9 @@ int main (){
 
     }
 
-    //liberar_matriz_int(m_categoria,5);
-    //liberar_matriz_char(nomes,n);
-    //liberar_matriz_double(dados,n);
+    liberar_matriz_int(m_categoria,5);
+    liberar_matriz_char(nomes,n);
+    liberar_matriz_double(dados,n);
     
     
     
