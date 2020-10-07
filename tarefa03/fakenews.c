@@ -39,9 +39,12 @@ void liberar_matriz_char(char **m_categoria, int n){
      printf("\n");
 
 }
- int contar_nomes(int *m_categoria){
+ int contar_nomes(int *m_categoria, int m){
      int contadora = 0;
-     for ( int i = 0; m_categoria[i] != -1; i++){
+     for ( int i = 0; i < m; i++){
+         if (m_categoria[i] == -1){
+             break;
+         }
          contadora += 1;
      }
      return contadora;
@@ -178,7 +181,7 @@ int main (){
     
     dados = aloca_matriz_double(n, m);
     nomes = aloca_matriz_char(n,25);
-    m_categoria = aloca_matriz_int(5,25);
+    m_categoria = aloca_matriz_int(5,n);
     
     for ( int i = 0; i < n; i ++){
         scanf("%s", nomes[i]);
@@ -198,7 +201,7 @@ int main (){
 
     printf("\nRESULTADO:\n");
     for ( int i = 0; i < 5; i++){
-        int contadora = contar_nomes(m_categoria[i]);
+        int contadora = contar_nomes(m_categoria[i], n);
         if ( i == 0){
             printf("Bot (%d):", contadora);
         } else if ( i == 1){
