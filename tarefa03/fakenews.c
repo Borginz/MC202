@@ -43,69 +43,45 @@ void liberar_matriz_char(char **m_categoria, int n){
 
 int ** aloca_matriz_int(int n, int m){
     int **matriz;
-    matriz = malloc((n+10) * sizeof (int *));
+    matriz = malloc((n+1) * sizeof (int *));
     for ( int i = 0; i < n; i++){
-        matriz[i] = malloc( (m+10) * sizeof(int));
+        matriz[i] = malloc( (m+1) * sizeof(int));
     }
     return matriz;
 }
 
-double calcular_desvpad(double *dados, int m, double media){
-    double soma = 0, desvpad;
-    for ( int i = 0; i < m; i++){
-        soma += (dados[i]-media)*(dados[i]-media);
-    } 
-    desvpad = sqrt((soma/m));
-    return desvpad;
 
-}
-
-double calcular_med( double *dados, int m){
-    double media = 0;
-    for ( int i = 0; i < m; i++){
-        media += dados[i]/m;
-    }
-    return media;
-
-}
-
-double calcular_min( double *dados, int m){
-    double minimo;
-    minimo = dados[0];
-    for ( int i = 1; i < m; i++){
-        if ( minimo > dados[i]){
-            minimo = dados[i];
-        }
-    }
-    return minimo;
-}
+    
 
 
-double calcular_maximo( double *dados, int m){
-    double maximo;
-    maximo = dados[0];
-    for ( int i = 1; i < m; i++){
-        if (maximo < dados[i]){
-            maximo = dados[i];
-        }
 
-    }
-    return maximo;
-}
+
+    
+
 
 int calcular_stats(double *dados, int m){
     // calculo as coisas 
     // 0 = Bot -- 1 = surpreendente -- 2 = normal 
     // 3 = local -- 4 = irrelevante 
-    double max, min, media, desvpad;
+    double max = dados[0], min = dados[0], media = dados[0], desvpad = 0;
     int identificador;
-    max = calcular_maximo(dados, m);
+    
+    
+    for ( int i = 1; i < m; i++){
+        max = ( max > dados[i]) ? max:dados[i];
+        min = ( min < dados[i]) ? min:dados[i];
+        media += dados[i];   
+    } 
+    media/=(double)m;
+
+    for ( int i = 0; i < m; i++){
+        desvpad += pow(dados[i]-media,2.0);   
+    }
+    desvpad = sqrt(desvpad/(double)m);
+    
     printf("%.2lf ", max);
-    min = calcular_min(dados, m);
     printf("%.2lf ", min);
-    media = calcular_med(dados, m);
     printf("%.2lf ", media);
-    desvpad = calcular_desvpad(dados,m,media);
     printf("%.2lf\n", desvpad);
     
     if ((media >= 60) && ( desvpad > 15)){
