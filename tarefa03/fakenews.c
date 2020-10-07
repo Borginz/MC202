@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <string.h>
 #include<assert.h>
 /*
 - Recebe o N e o M na primeira linha
@@ -35,45 +34,12 @@ void liberar_matriz_char(char **m_categoria, int n){
  }
 
  void imprimir_nomes(int *m_categoria, int tamanho, char **nomes){
-     for ( int i = 0; i < tamanho; i++){
-         if ( strcmp(nomes[m_categoria[i]], "AlexandriaOcasioCortez") == 0){
-             printf("achamos\n");
-        }
-        printf(" %s", nomes[m_categoria[i]]);
-
-         
-     }
+     for ( int i = 0; i < tamanho; i++){ 
+        printf(" %s", nomes[m_categoria[i]]);     
+     } 
      printf("\n");
 
 }
- int contar_nomes(int *m_categoria, int m){
-     int contadora = 0;
-     for ( int i = 0; i < m; i++){
-         if (m_categoria[i] == -1){
-             break;
-         }
-         contadora += 1;
-     }
-     return contadora;
-
- }
-
-
-
-
-int procurar_idx(int **m_categoria,int categoria, int m){
-    for ( int i = 0; i < m; i++){
-        if ( m_categoria[categoria][i] == -1){
-            return i;
-        }
-    }
-    return 0;
-
-
-
-}
-
-
 
 int ** aloca_matriz_int(int n, int m){
     int **matriz;
