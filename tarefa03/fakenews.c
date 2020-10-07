@@ -126,7 +126,7 @@ int calcular_stats(double *dados, int m){
     // 0 = Bot -- 1 = surpreendente -- 2 = normal 
     // 3 = local -- 4 = irrelevante 
     double max, min, media, desvpad;
-    int identificador;
+    int identificador = 0;
     max = calcular_maximo(dados, m);
     printf("%.2lf ", max);
     min = calcular_min(dados, m);
