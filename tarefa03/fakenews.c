@@ -126,7 +126,7 @@ int calcular_stats(double *dados, int m){
     // 0 = Bot -- 1 = surpreendente -- 2 = normal 
     // 3 = local -- 4 = irrelevante 
     double max, min, media, desvpad;
-    int identificador = 0;
+    int identificador;
     max = calcular_maximo(dados, m);
     printf("%.2lf ", max);
     min = calcular_min(dados, m);
@@ -136,10 +136,9 @@ int calcular_stats(double *dados, int m){
     desvpad = calcular_desvpad(dados,m,media);
     printf("%.2lf\n", desvpad);
     
-
     if ((media >= 60) && ( desvpad > 15)){
         identificador = 0;
-    } else if ((media < 60) && (desvpad <= 15)){
+    } else if ((media >= 60) && (desvpad <= 15)){
         identificador = 1;
     } else if ((media < 60) && (max >= 80) && (min > 20)){
         identificador = 2;     
@@ -216,9 +215,9 @@ int main (){
 
     }
 
-    liberar_matriz_int(m_categoria,5);
-    liberar_matriz_char(nomes,n);
-    liberar_matriz_double(dados,n);
+    //liberar_matriz_int(m_categoria,5);
+    //liberar_matriz_char(nomes,n);
+    //liberar_matriz_double(dados,n);
     
     
     
