@@ -11,13 +11,14 @@
 */
  void imprimir_nomes(int *m_categoria, int contadora, char **nomes){
      for ( int i = 0; i < contadora; i++){
-         printf(" &s", &nomes[i]);
+         printf(" %s", nomes[m_categoria[i]]);
      }
+     printf("\n");
 
 }
  int contar_nomes(int *m_categoria){
      int contadora = 0;
-     for ( int i = 0; i != -1; i++){
+     for ( int i = 0; m_categoria[i] != -1; i++){
          contadora += 1;
      }
      return contadora;
@@ -29,7 +30,7 @@
 
 int procurar_idx(int **m_categoria,int categoria, int m){
     for ( int i = 0; i < m; i++){
-        if ( i == -1){
+        if ( m_categoria[categoria][i] == -1){
             return i;
         }
     }
@@ -104,14 +105,14 @@ int calcular_stats(double *dados, int m){
     double max, min, media, desvpad;
     int identificador;
     max = calcular_maximo(dados, m);
-    printf("%.2lf", max);
+    printf("%.2lf ", max);
     min = calcular_min(dados, m);
-    printf("%.2lf", min);
+    printf("%.2lf ", min);
     media = calcular_med(dados, m);
-    printf("%.2lf", media);
+    printf("%.2lf ", media);
     desvpad = calcular_desvpad(dados,m,media);
     printf("%.2lf\n", desvpad);
-    printf("\n");
+    
 
     if ((media >= 60) && ( desvpad > 15)){
         identificador = 0;
@@ -160,24 +161,26 @@ int main (){
     for ( int i = 0; i < n; i ++){
         scanf("%s", nomes[i]);
         for ( int j = 0; j < m; j ++){
-            scanf("%lf", &dados[n][m]);
+            scanf("%lf", &dados[i][j]);
         }
     }
 
+
     for ( int i = 0; i < n; i++){
-        printf("%s", nomes[i]);
+        printf("%s ", nomes[i]);
         categoria = calcular_stats(dados[i], m);
         idx = procurar_idx(m_categoria,categoria,m);
         m_categoria[categoria][idx] = i;
     }
 
-    printf("RESULTADO:");
+
+    printf("\nRESULTADO:\n");
     for ( int i = 0; i < 5; i++){
         int contadora = contar_nomes(m_categoria[i]);
         if ( i == 0){
             printf("Bot (%d):", contadora);
         } else if ( i == 1){
-            printf("Surpreendente (%d)", contadora);
+            printf("Surpreendente (%d):", contadora);
         } else if ( i == 2){
             printf("Normal (%d):", contadora);
         } else if ( i == 3){

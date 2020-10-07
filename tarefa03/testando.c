@@ -50,8 +50,11 @@ int main (){
     for ( int i = 0; i < n; i++){
         printf("%s", nomes[i]);
         for ( int j = 0; j < m; j++){
-            printf("%lf", dados[n][m]);
+            printf(" %lf", dados[n][m]);
         }
+        printf("\n");      
     }
+
+
 
 }
