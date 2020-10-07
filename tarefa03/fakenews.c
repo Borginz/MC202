@@ -9,11 +9,48 @@
 - For calculando cada um dos termos, armanezar
 - Vetor de inteiros analisando a condição
 */
+ void imprimir_nomes(int *m_categoria, int contadora, char **nomes){
+     for ( int i = 0; i < contadora; i++){
+         printf(" &s", &nomes[i]);
+     }
+
+}
+ int contar_nomes(int *m_categoria){
+     int contadora = 0;
+     for ( int i = 0; i != -1; i++){
+         contadora += 1;
+     }
+     return contadora;
+
+ }
+
+
+
+
+int procurar_idx(int **m_categoria,int categoria, int m){
+    for ( int i = 0; i < m; i++){
+        if ( i == -1){
+            return i;
+        }
+    }
+    return 0;
+
+
+
+}
+
+
+
 int ** aloca_matriz_int(int n, int m){
     int **matriz;
     matriz = malloc(n * sizeof (int *));
     for ( int i = 0; i < n; i++)
         matriz[i] = malloc( m * sizeof(int));
+    for ( int i = 0; i < n; i++){
+        for ( int j = 0; j < m; j++){
+            matriz[i][j] = -1;
+        }
+    }
     return matriz;
 }
 
@@ -109,7 +146,7 @@ double ** aloca_matriz_double(int n, int m){
 
 
 int main (){
-    int n, m, categoria, **m_categoria;
+    int idx ,n, m, categoria, **m_categoria;
     double **dados;
     char **nomes;
 
@@ -118,7 +155,7 @@ int main (){
     
     dados = aloca_matriz_double(n, m);
     nomes = aloca_matriz_char(n,25);
-    m_categoria = aloca_matriz_int(n,n);
+    m_categoria = aloca_matriz_int(5,25);
     
     for ( int i = 0; i < n; i ++){
         scanf("%s", nomes[i]);
@@ -130,17 +167,34 @@ int main (){
     for ( int i = 0; i < n; i++){
         printf("%s", nomes[i]);
         categoria = calcular_stats(dados[i], m);
-        m_categoria[categoria] = i;
-
+        idx = procurar_idx(m_categoria,categoria,m);
+        m_categoria[categoria][idx] = i;
     }
 
+    printf("RESULTADO:");
+    for ( int i = 0; i < 5; i++){
+        int contadora = contar_nomes(m_categoria[i]);
+        if ( i == 0){
+            printf("Bot (%d):", contadora);
+        } else if ( i == 1){
+            printf("Surpreendente (%d)", contadora);
+        } else if ( i == 2){
+            printf("Normal (%d):", contadora);
+        } else if ( i == 3){
+            printf("Local (%d):", contadora);
+        } else if ( i == 4){
+            printf("Irrelevante (%d):", contadora);
+        }
+        
+        imprimir_nomes(m_categoria[i], contadora, nomes);
+
+    }
     
     
-
-
-
+    
 
     
+
 
     
     
