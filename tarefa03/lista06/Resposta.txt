@@ -1,0 +1,21 @@
+Questão 1:
+
+(a) 
+Não é possivel determinar a saída do programa ("segmentation fault).
+(b)
+Sim, pois nao foram feitas as alocações de maneira correta e eficiente.
+(c)
+Em resposta.c 
+
+Questão 2:
+Deve se fazer uma função que libere as linhas e as colunas dependendo de uma parametro passado 
+
+
+Questão 3:
+(a)
+Na passagem por valor, é passada uma cópia do valor da variável.
+Na passagem por referência, é passada uma referência à própria variável.
+(b)
+Quando se deseja fazer alterações em alguns itens do struct sem criar um novo struct ( grandes volumes)
+(C)
+Quando ja se tem e não deseja alterar o original e apenas utilizar a cópia para utilizar os valores sem alterar os originais.
