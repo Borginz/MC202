@@ -1,11 +1,11 @@
 #include <stdio.h>
-#define MAX 100
+#define MAX 101
 /*
 n = O numero de linhas
 m = o numero de colunas do texto
 q = numero de palavras a serem buscadas
 */
-int valido(char matriz[][100], int i, int j, int n, int m){
+int valido(char matriz[][MAX], int i, int j, int n, int m){
     // Função para checar as bordas
     if ((i > n-1) || ( i < 0) || (j > m-1) || (j < 0) ){
         return 0;
@@ -37,38 +37,50 @@ int verificar_pos(char matriz[][MAX], int i, int j, char palavra[], int k,int n,
     if (a||b||c||d){
         return 1;
     }
+    return 0;
+
 }
 
 
-void comparar_nome(char matriz[][MAX], char palavra[], int n, int m){
-    for ( int i = 0; i < n; i++)
-        for ( int j = 0; j < m; j++)
-       if ( matriz[i][j] == palavra[0]){
-           int id = verificar_pos(matriz,i,j,palavra,1,n,m);
-           if ( id == 1)
-           printf("sim\n");
-           else
-           printf("não\n");
-
-       } 
+int comparar_nome(char matriz[][MAX], char palavra[], int n, int m){
+    int id = 0;
+    for ( int i = 0; i < n; i++){
+        for ( int j = 0; j < m; j++){
+            if ( matriz[i][j] == palavra[0]){
+                id = verificar_pos(matriz,i,j,palavra,0,n,m);
+                if ( id == 1){
+                    return id;
+                }
+            }
+        }
+    }
+    return id;
 }
+    
 
-void ler_matriz( int matriz[][MAX], int n, int m){
-    for ( int i = 0; i < n; i++)
-        for ( int j = 0; j < m; j++)
-        scanf("%s", &matriz[i][j]);
+void ler_matriz( char matriz[][MAX], int n, int m){
+    for ( int i = 0; i < n; i++){
+        scanf("%s", matriz[i]);
+    }
+        
+        
 }
 
 int main(){
-    int n,m,q;
+    int n,m,q, id = 0;
     char matriz[MAX][MAX], palavras[10][21];
 
 
     scanf("%d %d %d", &n, &m, &q);
     ler_matriz(matriz,n,m);
     for( int i = 0; i < q; i++){
-        scanf("%s", &palavras[i]);
-        comparar_nome(matriz,palavras[i],n,m);
+        scanf(" %s", palavras[i]);
+        id = comparar_nome(matriz,palavras[i],n,m);
+        if ( id == 1){
+            printf("sim\n");
+        } else {
+            printf("nao\n");
+        }
     }
     
 
