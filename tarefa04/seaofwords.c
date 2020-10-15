@@ -3,7 +3,7 @@
 /*
 n = O numero de linhas
 m = o numero de colunas do texto
-q = numero de palavras a serem buscadas
+q = o numero de palavras a serem buscadas
 */
 
 // Função para checar se a posição passada é valida
