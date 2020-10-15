@@ -32,6 +32,7 @@ int verificar_pos(char matriz[][MAX], int i, int j, char palavra[], int k,int n,
     char aux = matriz[i][j];
     matriz[i][j] = '#'; // Trocando letra ja conferida
     // Verificar os vizinhos recursivamente por backtracking
+    
     int a = verificar_pos(matriz, i, j+1, palavra, k+1,n, m);
     int b = verificar_pos(matriz, i, j-1, palavra, k+1,n, m);
     int c = verificar_pos(matriz, i-1, j, palavra, k+1,n, m);
