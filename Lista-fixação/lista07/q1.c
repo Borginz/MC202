@@ -1,13 +1,13 @@
 // Questão 1:
 // potencia recursiva
 #include<stdio.h>
-/*int pot(int a, int b){
+int pot(int a, int b){
     if ( b == 0 )
         return 1;
     else{
         return a*pot(a,b-1);
-    }    
-}*/
+    }
+}
 
 int main(){
     int a,b, resp;
@@ -26,7 +26,9 @@ int pot (int base, int exp){
 }
 
 // Questão 3:
-/* 
-A forma recursiva e mais efienciente e faz menos multiplicações
-do que a iterativa por causa do for 
-*/
+/**
+ * A forma recursiva e mais efienciente e faz menos multiplicações
+ * do que a iterativa por causa do for 
+ **/
+
+// Fornecido por Leonardo Borges
