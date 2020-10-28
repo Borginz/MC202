@@ -52,6 +52,34 @@ Natural ler_natural(){
     
 }
 
+Natural somar_natural(Natural a, Natural b){
+    Natural c = {NULL,NULL};
+    int carry = 0;
+    no* aux1 = a.mais_dir;
+    no* aux2 = b.mais_dir;
+    
+    
+    while (aux1 || aux2)
+    {
+        int soma = carry;
+        if ( aux1 ){
+            soma+=aux1->valor;
+            aux1 = aux1->esq;
+            
+        }
+        if ( aux2 ){
+            soma+=aux2->valor;
+            aux2 = aux2->esq;
+        }
+        inserir_esq(c,soma%10);
+        carry = soma/10;
+    }
+    if (carry){
+        inserir_esq(carry);
+    }
+    return c;
+    
+}
 
 
 int main(){
