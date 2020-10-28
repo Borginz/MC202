@@ -33,6 +33,22 @@ void inserir_dir( Natural *x, int digito){
     }
 }
 
+void inserir_esq( Natural *x, int digito){
+    no* novo_no = malloc(sizeof(no));
+    novo_no->valor = digito;
+    novo_no->esq = NULL;
+    
+    if (x->mais_esq == NULL){
+        novo_no->dir = NULL;
+        x->mais_esq = novo_no;
+        x->mais_dir = novo_no;    
+    } else{
+        novo_no->dir = x->mais_esq;
+        x->mais_esq->esq = novo_no; 
+        x->mais_esq = novo_no;
+        
+    }
+}
 
 Natural ler_natural(){
     char digito;
@@ -51,13 +67,26 @@ Natural ler_natural(){
 
     
 }
+void imprimir_natural(Natural digitos){
+    no* aux1 = digitos.mais_esq;
 
+    while(aux1){
+        printf("%d",aux1->valor);
+        aux1 = aux1->dir;
+    }
+    printf("\n");
+    
+    
+
+} 
+Natural subtrair_natural( Natural a, Natural b){
+    
+}
 Natural somar_natural(Natural a, Natural b){
     Natural c = {NULL,NULL};
     int carry = 0;
     no* aux1 = a.mais_dir;
     no* aux2 = b.mais_dir;
-    
     
     while (aux1 || aux2)
     {
@@ -71,15 +100,16 @@ Natural somar_natural(Natural a, Natural b){
             soma+=aux2->valor;
             aux2 = aux2->esq;
         }
-        inserir_esq(c,soma%10);
+        inserir_esq(&c,soma%10);
         carry = soma/10;
     }
     if (carry){
-        inserir_esq(carry);
+        inserir_esq(&c,carry);
     }
     return c;
     
 }
+
 
 
 int main(){
@@ -88,12 +118,16 @@ int main(){
     
     scanf("%d", &n);
     for ( int i = 0; i < n;i++){
-        scanf("%c", &op);
+        scanf(" %c", &op);
          Natural a = ler_natural();
          Natural b = ler_natural();
-         if ( op == '+'){
+         if ( op == '+'){ 
             Natural c = somar_natural(a,b);
             imprimir_natural(c);
+            
+        } else if ( op == '-'){
+            Natural c = subtrair_natural(a,b);
+        }
 
 
     }
