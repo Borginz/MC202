@@ -179,10 +179,19 @@ Natural somar_natural(Natural a, Natural b){
     return c;
     
 }
+void liberar(no *x){
+    no* aux = x;
+    while(x){
+        aux = x;
+        x = x->dir;
+        free(aux);
+    }
+}
 
 Natural multiplicar_natural(Natural a, Natural b){
     Natural c = {NULL,NULL};
     Natural soma_aux = {NULL,NULL};
+    no* aux_liberar_multi;
     int carry = 0, contador = 0;
     no* aux1 = a.mais_dir;
     no* aux2 = b.mais_dir;
@@ -200,7 +209,10 @@ Natural multiplicar_natural(Natural a, Natural b){
                 inserir_dir(&soma_aux,0);
             }
             contador++;
+            aux_liberar_multi = c.mais_esq;
             c = somar_natural(soma_aux,c);
+            liberar(aux_liberar_multi);
+            liberar(soma_aux.mais_esq);
             soma_aux.mais_dir = NULL;
             soma_aux.mais_esq = NULL;
             aux1 = a.mais_dir;
@@ -211,16 +223,6 @@ Natural multiplicar_natural(Natural a, Natural b){
     
 
 
-
-}
-void liberar( Natural *x){
-    no* aux = x->mais_esq;
-    while(x->mais_esq){
-        aux = x->mais_esq;
-        x->mais_esq = aux->dir;
-        free(aux);
-
-    }
 
 }
 
@@ -236,21 +238,21 @@ int main(){
          if ( op == '+'){ 
             Natural c = somar_natural(a,b);
             imprimir_natural(c);
-            liberar(&a);
-            liberar(&b);
-            liberar(&c);
+            liberar(a.mais_esq);
+            liberar(b.mais_esq);
+            liberar(c.mais_esq);
         } else if ( op == '-'){
             Natural c = subtrair_natural(a,b);
             imprimir_natural(c);
-            liberar(&a);
-            liberar(&b);
-            liberar(&c);
+            liberar(a.mais_esq);
+            liberar(b.mais_esq);
+            liberar(c.mais_esq);
         } else if (op == '*'){
             Natural c = multiplicar_natural(a,b);
             imprimir_natural(c);
-            liberar(&a);
-            liberar(&b);
-            liberar(&c);
+            liberar(a.mais_esq);
+            liberar(b.mais_esq);
+            liberar(c.mais_esq);
         } 
 
 
