@@ -219,7 +219,6 @@ void liberar( Natural *x){
         aux = x->mais_esq;
         x->mais_esq = aux->dir;
         free(aux);
-        aux = x->mais_esq;
 
     }
 
