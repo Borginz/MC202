@@ -178,7 +178,49 @@ Natural somar_natural(Natural a, Natural b){
     
 }
 
+Natural multiplicar_natural(Natural a, Natural b){
+    Natural c = {NULL,NULL};
+    Natural soma_aux = {NULL,NULL};
+    int carry = 0, contador = 0;
+    no* aux1 = a.mais_dir;
+    no* aux2 = b.mais_dir;
+    while(aux2){
+        carry = 0;
+            while(aux1){
+                inserir_esq(&soma_aux, ((aux1->valor*aux2->valor+carry)%10));
+                carry = ((aux1->valor*aux2->valor+carry)/10);
+                aux1 = aux1->esq;
+            }
+            if(carry){
+                inserir_esq(&soma_aux,carry);
+            }
+            for ( int i = 0; i < contador; i++){
+                inserir_dir(&soma_aux,0);
+            }
+            contador++;
+            c = somar_natural(soma_aux,c);
+            soma_aux.mais_dir = NULL;
+            soma_aux.mais_esq = NULL;
+            aux1 = a.mais_dir;
+            aux2 = aux2->esq;
+    }
+    tirar_zeros(&c);
+    return c;
+    
 
+
+
+}
+void liberar( Natural *x){
+    no* aux = x->mais_esq;
+    while(x->mais_esq){
+        aux = x->mais_esq;
+        x->mais_esq = aux->dir;
+        free(aux);
+
+    }
+
+}
 
 int main(){
     int n;
@@ -192,14 +234,22 @@ int main(){
          if ( op == '+'){ 
             Natural c = somar_natural(a,b);
             imprimir_natural(c);
-            liberar(a);
-            liberar(b);
-            liberar(c);
-            
+            liberar(&a);
+            liberar(&b);
+            liberar(&c);
         } else if ( op == '-'){
             Natural c = subtrair_natural(a,b);
             imprimir_natural(c);
-        }
+            liberar(&a);
+            liberar(&b);
+            liberar(&c);
+        } else if (op == '*'){
+            Natural c = multiplicar_natural(a,b);
+            imprimir_natural(c);
+            liberar(&a);
+            liberar(&b);
+            liberar(&c);
+        } 
 
 
     }
