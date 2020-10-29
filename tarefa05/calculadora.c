@@ -22,13 +22,13 @@ void inserir_dir( Natural *x, int digito){
     novo_no->valor = digito;
     novo_no->dir = NULL;
     
-    if (x->mais_dir == NULL){
+    if (x->mais_dir == NULL){// verificando se a lista for vazia
         novo_no->esq = NULL;
         x->mais_dir = novo_no;
         x->mais_esq = novo_no;
         x->tamanho = 1;
             
-    } else{
+    } else{// caso a lista nao for vazia
         novo_no->esq = x->mais_dir;
         x->mais_dir->dir = novo_no; 
         x->mais_dir = novo_no;
@@ -43,27 +43,27 @@ void inserir_esq( Natural *x, int digito){
     novo_no->valor = digito;
     novo_no->esq = NULL;
     
-    if (x->mais_esq == NULL){
+    if (x->mais_esq == NULL){// verificando se a lista for vazia
         novo_no->dir = NULL;
         x->mais_esq = novo_no;
         x->mais_dir = novo_no;    
-    } else{
+    } else{// caso a lista nao for vazia
         novo_no->dir = x->mais_esq;
         x->mais_esq->esq = novo_no; 
         x->mais_esq = novo_no;
         
     }
 }
-
+// Função que le digito a digito a string 
 Natural ler_natural(){
     char digito;
     Natural rv = {NULL,NULL};
     digito = getchar();
-    while( digito < '0' || digito > '9')
+    while( digito < '0' || digito > '9')// verifica os invalidos e pula
     {
         digito = getchar();
     }
-    while (digito >= '0' && digito <= '9')
+    while (digito >= '0' && digito <= '9')// verifica os validos e add a direita
     {
         inserir_dir(&rv, digito - '0');
         digito = getchar();
@@ -75,7 +75,7 @@ Natural ler_natural(){
 void imprimir_natural(Natural digitos){
     no* aux1 = digitos.mais_esq;
 
-    while(aux1){
+    while(aux1){// enquanto nao acabar, imprime o digito
         printf("%d",aux1->valor);
         aux1 = aux1->dir;
     }
@@ -84,6 +84,7 @@ void imprimir_natural(Natural digitos){
     
 
 }
+//Função para verificar digito a digito qual é maior
 int verificar_digito(Natural a, Natural b){
     no* aux1 = a.mais_esq;
     no* aux2 = b.mais_esq;
@@ -99,7 +100,7 @@ int verificar_digito(Natural a, Natural b){
     }
     return 1;
 }
-
+// Função que compara o tamanho de duas listas de nós
 int comparar_tamanho( Natural a, Natural b){
     if ( a.tamanho < b.tamanho){
         return 0;  
@@ -110,7 +111,7 @@ int comparar_tamanho( Natural a, Natural b){
     }
     return 1;
 }
-
+// Função para tirar os zeros a esquerda das listas
 void tirar_zeros(Natural *x){
     no* aux = x->mais_esq;
     no* aux_aux = NULL;
@@ -122,7 +123,7 @@ void tirar_zeros(Natural *x){
         free(aux_aux);      
     }
 }
-
+// Função para subtrair uma lista da outra
 Natural subtrair_natural( Natural a, Natural b){
     Natural c = {NULL,NULL};
     no* aux1 = a.mais_dir;
@@ -150,6 +151,7 @@ Natural subtrair_natural( Natural a, Natural b){
     return c;
     
 }
+//Função para somar duas listas
 Natural somar_natural(Natural a, Natural b){
     Natural c = {NULL,NULL};
     int carry = 0;
@@ -217,6 +219,7 @@ void liberar( Natural *x){
         aux = x->mais_esq;
         x->mais_esq = aux->dir;
         free(aux);
+        aux = x->mais_esq;
 
     }
 
