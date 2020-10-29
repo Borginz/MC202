@@ -100,7 +100,7 @@ int verificar_digito(Natural a, Natural b){
     }
     return 1;
 }
-// Função que compara o tamanho de duas listas de nós
+// Função que compara o tamanho de duas listas de nós, retorno 0 se o segundo for maior
 int comparar_tamanho( Natural a, Natural b){
     if ( a.tamanho < b.tamanho){
         return 0;  
@@ -115,7 +115,7 @@ int comparar_tamanho( Natural a, Natural b){
 void tirar_zeros(Natural *x){
     no* aux = x->mais_esq;
     no* aux_aux = NULL;
-    while (aux->dir != NULL && aux->valor == 0){
+    while (aux->dir != NULL && aux->valor == 0){//verificar se é valido ( zero a esquerda)
         aux->dir->esq = NULL;
         aux_aux = aux;
         aux = aux->dir;
@@ -129,15 +129,15 @@ Natural subtrair_natural( Natural a, Natural b){
     no* aux1 = a.mais_dir;
     no* aux2 = b.mais_dir;
     int subtracao = 0;
-    if(!comparar_tamanho(a,b)){
+    if(!comparar_tamanho(a,b)){// comparar o tamanho para subtrair
         aux1 = b.mais_dir;
         aux2 = a.mais_dir;
     }
 
-    while(aux1){
+    while(aux1){//enquanto o maior nao acabar
         subtracao = aux1->valor;
         if ( aux2 ){
-            if (subtracao < aux2->valor){
+            if (subtracao < aux2->valor){// verificar subtração digito a digito
                 aux1->esq->valor-= 1;
                 subtracao += 10;
             }
@@ -145,9 +145,9 @@ Natural subtrair_natural( Natural a, Natural b){
             aux2 = aux2->esq;
         }
         aux1 = aux1->esq;
-        inserir_esq(&c, subtracao);
+        inserir_esq(&c, subtracao);//insere a esquerda a subtração
     }
-    tirar_zeros(&c);
+    tirar_zeros(&c);// tirar os zeros a esquerda em caso de numeros iguais 
     return c;
     
 }
@@ -158,7 +158,7 @@ Natural somar_natural(Natural a, Natural b){
     no* aux1 = a.mais_dir;
     no* aux2 = b.mais_dir;
     
-    while (aux1 || aux2)
+    while (aux1 || aux2)// verificar se ainda precisa somar
     {
         int soma = carry;
         if ( aux1 ){
@@ -170,11 +170,11 @@ Natural somar_natural(Natural a, Natural b){
             soma+=aux2->valor;
             aux2 = aux2->esq;
         }
-        inserir_esq(&c,soma%10);
+        inserir_esq(&c,soma%10);//insere a esquerda o resto
         carry = soma/10;
     }
     if (carry){
-        inserir_esq(&c,carry);
+        inserir_esq(&c,carry);//insere a esq se ainda tiver carry
     }
     return c;
     
@@ -187,7 +187,7 @@ void liberar(no *x){
         free(aux);
     }
 }
-
+// Função para multiplicar os digitos
 Natural multiplicar_natural(Natural a, Natural b){
     Natural c = {NULL,NULL};
     Natural soma_aux = {NULL,NULL};
@@ -197,20 +197,20 @@ Natural multiplicar_natural(Natural a, Natural b){
     no* aux2 = b.mais_dir;
     while(aux2){
         carry = 0;
-            while(aux1){
-                inserir_esq(&soma_aux, ((aux1->valor*aux2->valor+carry)%10));
-                carry = ((aux1->valor*aux2->valor+carry)/10);
+            while(aux1){//enquanto nao acabar a linha de cima da multiplicação
+                inserir_esq(&soma_aux, ((aux1->valor*aux2->valor+carry)%10));//inserir na soma aux a esquerda
+                carry = ((aux1->valor*aux2->valor+carry)/10);// atualiza o carry
                 aux1 = aux1->esq;
             }
             if(carry){
-                inserir_esq(&soma_aux,carry);
+                inserir_esq(&soma_aux,carry);// se ainda estiver carry adiciona a esquerda
             }
-            for ( int i = 0; i < contador; i++){
+            for ( int i = 0; i < contador; i++){// inserir zeros a direita para somar
                 inserir_dir(&soma_aux,0);
             }
             contador++;
             aux_liberar_multi = c.mais_esq;
-            c = somar_natural(soma_aux,c);
+            c = somar_natural(soma_aux,c);//somar os produtos
             liberar(aux_liberar_multi);
             liberar(soma_aux.mais_esq);
             soma_aux.mais_dir = NULL;
@@ -257,21 +257,4 @@ int main(){
 
 
     }
-    
-    
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
 }
