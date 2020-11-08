@@ -1,0 +1,17 @@
+Processar atendimentos(lista_espera);
+
+Faço uma interação para passar em cada paciente{
+    se a lista_atendimento for vazia{
+        sei que acabou
+    }
+    se ela n for vazia{
+        Crio um no com o ponteiro do paciente
+        se o paciente for prioritario{
+        adiciono o no_paciente no inicio da fila pertinente
+        } se nao for{
+        adiociono o no_paciente no fim da fila pertinente
+    }
+    retiro o valor da lista de atendimento;
+    }
+
+}
