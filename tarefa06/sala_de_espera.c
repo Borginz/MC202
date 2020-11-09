@@ -5,6 +5,8 @@
 typedef struct Paciente Paciente;
 typedef struct Node Node;
 typedef struct Lista_atendimento Lista_atendimento;
+typedef struct no_Lista_atendimento no_Lista_atendimento;
+
 
 
 typedef struct Node
@@ -19,15 +21,17 @@ typedef struct Deques{
     Node*fim;
 }Deques;
 
+typedef struct no_Lista_atendimento{
+int Valor;
+no_Lista_atendimento *prox;
+}no_Lista_atendimento;
+
 typedef struct Lista_atendimento{
     no_Lista_atendimento *ini;
     no_Lista_atendimento *fim;
 } Lista_atendimento;
 
-typedef struct no_Lista_atendimento{
-int Valor;
-Lista_atendimento *prox;
-}no_Lista_atendimento;
+
 
 typedef struct Paciente{
     char Nome[51];
@@ -87,7 +91,7 @@ void inserir_final_deque(Deques *deque, Paciente *pont_paciente){
     } 
 }
 
-void retirar_inicio_deque(Deques *deque, Paciente *p){
+void retirar_inicio_deque(Deques *deque){
     Node *aux = malloc(sizeof(Node));
     aux = deque->ini;
     deque->ini = aux->prox;
@@ -122,7 +126,10 @@ void adicionar_atendimento_pac(int id, Paciente* paciente){
         paciente->atendimento.fim = novo_no;
     }
 }
+void imprimir_paciente(int hora, int minutos, Paciente *paciente){
+    printf("%02d:%d %s", hora, minutos, paciente->Nome);
 
+}
 
 void atender_pacientes(Deques *lista_paciente, Especialidade cecom[]){
     int hora = 8;
@@ -135,7 +142,7 @@ void atender_pacientes(Deques *lista_paciente, Especialidade cecom[]){
                 int id = aux->paciente->atendimento.ini->Valor;
                 Deques lista_add = cecom[id-1].lista_de_espera;
                 Lista_atendimento lista_remover = aux->paciente->atendimento;
-                if (aux->paciente->prioridade == 'P'){
+                if (aux->paciente->prioridade == 'p'){
                     inserir_inicio_deque(&lista_add, aux->paciente);
                     remover_atendimento(&lista_remover, aux->paciente);
                 } else{
@@ -147,8 +154,8 @@ void atender_pacientes(Deques *lista_paciente, Especialidade cecom[]){
             } else if (aux->paciente->esta_fila == 1 && aux->paciente->qtd_atendimentos == 0){
                 continue;
             } else if (aux->paciente->esta_fila == 0 && aux->paciente->qtd_atendimentos == 0){
-                //imprimir_paciente()
-                retirar_inicio_deque(&lista_paciente, aux->paciente);
+                imprimir_paciente(hora, minutos, aux->paciente);
+                retirar_inicio_deque(lista_paciente);
             }
             aux = aux->prox;
         }
@@ -158,7 +165,7 @@ void atender_pacientes(Deques *lista_paciente, Especialidade cecom[]){
             for( int i = 0; i < profi_atual.qtd_profissionais || profi_atual.lista_de_espera.ini == NULL; i++){
                 profi_atual.lista_de_espera.ini->paciente->qtd_atendimentos--;
                 profi_atual.lista_de_espera.ini->paciente->esta_fila = 0;
-                retirar_inicio_deque(&profi_atual.lista_de_espera,profi_atual.lista_de_espera.ini->paciente);
+                retirar_inicio_deque(&profi_atual.lista_de_espera);
             }
         }
         minutos += 10;
@@ -171,7 +178,10 @@ void atender_pacientes(Deques *lista_paciente, Especialidade cecom[]){
     }
 }
 
-
+void inicializar_atendimento_pac(Paciente *paciente){
+    paciente->atendimento.fim = NULL;
+    paciente->atendimento.ini = NULL;
+}
 
 
 int main(){
@@ -180,7 +190,6 @@ int main(){
     int id;
     inicializar(cecom);
     Deques lista_paciente;
-    Deques Lista_atendidos;
     lista_paciente.fim = NULL;
     lista_paciente.ini = NULL;
 
@@ -192,12 +201,12 @@ int main(){
         strcpy(paciente->Nome,nome);
         paciente->prioridade = prioridade;
         paciente->qtd_atendimentos = 0;
-        
+        inicializar_atendimento_pac(paciente);
         while(scanf("%d",&id) > 0){
             adicionar_atendimento_pac(id,paciente);
             paciente->qtd_atendimentos += 1;
         }
-        inserir_final_deque(paciente,&lista_paciente);
+        inserir_final_deque(&lista_paciente, paciente);
     }
     atender_pacientes(&lista_paciente, cecom); 
 }

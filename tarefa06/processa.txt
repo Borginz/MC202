@@ -1,17 +1,44 @@
 Processar atendimentos(lista_espera);
+hora = 8;
+minutos = 0;
+Enquanto a lista de paciente não acabar{
+    crio um aux que vai receber inicio;
+    enquanto o aux nao apontar para null{
+        Verifico se esta é 0 e se tem atendimentos{
+            verifico se é prioritario{
+                adiciono no_paciento no inicio do vetor[id-1]
+            } se nao for{
+                adiciono no_paciente no fim do vetor[id-1]
+            } 
+            esta = 1
+            retiro_inicio do paciente
+        } se for 1 e 0 atendimento{
+            continuo
+            
+        } se for 0 e 0 atendimentos{
+            printo o hora atual e o nome
+            retiro do inicio o paciente; 
+        }
+        aux = aux.prox
+    }
 
-Faço uma interação para passar em cada paciente{
-    se a lista_atendimento for vazia{
-        sei que acabou
+
+    intero por 9 vezes{
+        intero por qtd.profi vezes ou deque_vazio{
+            abaixo em 1 a quantidade de atendimentos
+            esta = 0
+            removo do inicio do deque
+        }
     }
-    se ela n for vazia{
-        Crio um no com o ponteiro do paciente
-        se o paciente for prioritario{
-        adiciono o no_paciente no inicio da fila pertinente
-        } se nao for{
-        adiociono o no_paciente no fim da fila pertinente
-    }
-    retiro o valor da lista de atendimento;
-    }
+    minutos += 10;
+    if minutos >= 60{
+        hora += 1;
+        minutos = 0;
+    } 
+    
+
+
+
+
 
 }
