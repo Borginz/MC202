@@ -34,7 +34,8 @@ typedef struct Paciente{
     char prioridade;
     Lista_atendimento atendimento;
     int chegada;
-    int qtd_atendimentos = 0;
+    int qtd_atendimentos;
+    int esta_fila;
 }Paciente;
 
 typedef struct Especialidade{
@@ -113,7 +114,6 @@ void adicionar_atendimento_pac(int id, Paciente* paciente){
         paciente->atendimento.fim->prox = novo_no;
         paciente->atendimento.fim = novo_no;
     } else{
-        
         paciente->atendimento.ini = novo_no;
         paciente->atendimento.fim = novo_no;
     }
@@ -143,7 +143,7 @@ int main(){
         strcpy(paciente->Nome,nome);
         paciente->prioridade = prioridade;
         paciente->chegada = ordem_chegada;
-        int contador_atd = 0;
+        paciente->qtd_atendimentos = 0;
         
         while(scanf("%d",&id) > 0){
             adicionar_atendimento_pac(id,paciente);
