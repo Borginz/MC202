@@ -191,7 +191,12 @@ void inicializar_atendimento_pac(Paciente *paciente){
     paciente->atendimento.ini = NULL;
 }
 
-    
+void liberar_lista_paciente(Deques *lista_paciente){
+    while(lista_paciente->ini){
+        retirar_inicio_deque(lista_paciente);
+    }
+
+}    
 
 
  
@@ -223,6 +228,7 @@ int main(){
     }
  
     atender_pacientes(&lista_paciente, cecom);
+    liberar_lista_paciente(&lista_paciente);
     
 
     
