@@ -192,10 +192,11 @@ void inicializar_atendimento_pac(Paciente *paciente){
 }
 
 void liberar_lista_paciente(Deques *lista_paciente){
+    int i = 0;
     while(lista_paciente->ini){
+        free(lista_paciente->ini->paciente);
         retirar_inicio_deque(lista_paciente);
     }
-
 }    
 
 
