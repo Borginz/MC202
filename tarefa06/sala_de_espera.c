@@ -231,7 +231,4 @@ int main(){
  
     atender_pacientes(&lista_paciente, cecom);// Função para rodar por todos os pacientes e ir atendendo
     liberar_lista_paciente(&lista_paciente);// Função para liberar os pacientes e os nós
-    
-
-    
 }

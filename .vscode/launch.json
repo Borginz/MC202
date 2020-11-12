@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "insira o nome do programa, por exemplo ${workspaceFolder}/a.exe",
-            "args": [],
+            "args": ["<testes/sala_de_espera1.in"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
