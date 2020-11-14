@@ -32,26 +32,18 @@ No_arvore* inserir_arvore( No_arvore* raiz, No_arvore *novo){
     return raiz;
 }
 
-No_arvore* minimo(No_arvore* raiz){
-    if ( raiz == NULL || raiz->esq == NULL){
-        return raiz;
-    }
-    return minimo(raiz->esq);
-}
-
-
 
 
 void buscar_triade_x(No_arvore* raiz_ori, No_arvore* raiz_atual, int id, Triade* triade ){
-    if (raiz_atual != NULL){
+    if (raiz_atual->esq != NULL){
         buscar_triade_x(raiz_ori,raiz_atual->esq,id,triade);
-        if(triade == NULL){
+        if(triade->x != NULL){
             return;
         }
     }
     triade->x = raiz_atual;
     buscar_triade_y(raiz_ori,raiz_ori,(id-triade->x->valor),triade);
-    if ( triade != NULL){
+    if ( triade->y != NULL){
         return;
     }
     if ( raiz_atual->dir != NULL){
@@ -60,29 +52,42 @@ void buscar_triade_x(No_arvore* raiz_ori, No_arvore* raiz_atual, int id, Triade*
 }
 
 void buscar_triade_y(No_arvore *raiz_ori,No_arvore *raiz_atual,int id,Triade *triade){
-    if (raiz_atual->esq != NULL && raiz_atual->valor > triade->x->valor){
+    if (raiz_atual->esq != NULL && raiz_atual->esq->valor > triade->x->valor){
         buscar_triade_y(raiz_ori,raiz_atual->esq,id,triade);
-        if ( triade != NULL){
+        if ( triade->y != NULL){
             return;
         }
     }
     triade->y = raiz_atual;
     triade->z = buscar_triade_z(raiz_ori,(id-triade->y->valor));
-    
+    if (triade->z != NULL){
+        return;
+    }
+    if (raiz_atual->dir != NULL && raiz_atual->valor < id){
+        buscar_triade_y(raiz_ori,raiz_atual->dir,id,triade);
+    }
 
 }
 
-
+No_arvore* busca_traide_z (No_arvore* raiz, int k) {
+    if (raiz == NULL || raiz->valor == k)
+       return raiz;
+    if (raiz->valor > k)
+       return buscar_triade_z(raiz->esq, k);
+    else
+       return buscar_triade_z(raiz->dir, k);
+}
 
 int main(){
     int m,n,valor;
-    long int id = 0;
+    long int id = 0,valor_x,valor_y,valor_z,valor_id;
     No_arvore *raiz = NULL;
-    char palavra[6];
+    char palavra[6], palavra_copia[100];
     Triade triade;
     triade.x = NULL;
     triade.y = NULL;
     triade.z = NULL;
+    
 
     while (scanf("%d %d", &m, &n) != EOF){
         for ( int i = 0; i < m; i++){
@@ -97,6 +102,19 @@ int main(){
         for ( int i = 0; i < n;i++){
             scanf("%ld",&id);
             buscar_triade_x(raiz,raiz,id,&triade);
+            strcpy(palavra_copia,triade.x->palavra);
+            valor_x = triade.x->valor;
+            remover_triade(x);
+            strcat(palavra_copia,triade.y->palavra);
+            valor_y = triade.y->valor;
+            remover_triade(y);
+            strcat(palavra_copia,triade.z->palavra);
+            valor_y = triade.z->valor;
+            remover_triade(z);
+            valor_id = valor_x+valor_y+valor_z;
+            criar_novo_no(palavra_copia,valor_id);
+            inserir_arvore(novo_no);
+
 
         }
         //imprimir_arvore(raiz);

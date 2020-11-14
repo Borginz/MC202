@@ -1,0 +1,34 @@
+buscar_triade_x (raiz_ori, raiz_atual, id, triade){
+    
+    se raiz esq nao for null{
+        buscar_triade_x(raiz_ori, raiz_atual-esq,id,triade)
+        se meu triade for diferente de null
+        return;
+    }
+    triade->x = raiz_atual
+    buscar_triade_y(raiz_ori,raiz_ori,id-x,traide)
+    se meu triade for diferente de null{
+        return;
+    }
+    se raiz->dir diferente de null{
+    buscar_triade_x(raiz_ori, raiz_atual->dir,id,traide)
+    }
+    
+}
+
+buscar_triade_y(raiz_ori,raiz_atual,id,traide){
+    se raiz->esq diferente de null e maior que triade-x{
+        buscar_triade_y(raiz_ori,raiz_atual-esq,id,traide)
+        se meu triade for diferente de null
+        return;
+    }
+    traide->y = raiz_atual
+    triade->z = buscar_traide_z(raiz_ori,id-y);
+    se minha for diferente de null{
+        return;
+    }
+    se minha raiz_atual dir for diferente de null e menor que id{
+        buscar_triade_y(raiz_ori,raiz_atual->dir,id,triade)
+    }
+}
+buscar_z prof
