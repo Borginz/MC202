@@ -35,6 +35,8 @@ No_arvore *inserir_arvore(No_arvore *raiz, No_arvore *novo)
     }
     return raiz;
 }
+
+//Função para busca normalmente de um elemento na arvore binaria
 No_arvore *buscar_triade_z(No_arvore *raiz, long int k)
 {
     if (k < 0)
@@ -46,7 +48,8 @@ No_arvore *buscar_triade_z(No_arvore *raiz, long int k)
     else
         return buscar_triade_z(raiz->dir, k);
 }
-
+// Função para buscar y recursivamente pegando o menor para analisar
+// marcando o y caso for o mais a esquerda e buscando z normalmente e analisando se foi null
 void buscar_triade_y(No_arvore *raiz_ori, No_arvore *raiz_atual, long int id, Triade *triade)
 {
     if (triade->z != NULL)
@@ -56,7 +59,7 @@ void buscar_triade_y(No_arvore *raiz_ori, No_arvore *raiz_atual, long int id, Tr
     if (raiz_atual->esq != NULL /*&& raiz_atual->esq->valor > triade->x->valor*/)
     {
         buscar_triade_y(raiz_ori, raiz_atual->esq, id, triade);
-        if (triade->z != NULL)
+        if (triade->z != NULL)// se achei o z
         {
             return;
         }
@@ -64,38 +67,39 @@ void buscar_triade_y(No_arvore *raiz_ori, No_arvore *raiz_atual, long int id, Tr
 
     triade->y = raiz_atual;
     triade->z = buscar_triade_z(raiz_ori, (id - triade->y->valor));
-    if (triade->z != NULL)
+    if (triade->z != NULL)// se achei o z
     {
         return;
     }
     if (raiz_atual->dir != NULL /*&& raiz_atual->valor < id*/)
     {
         buscar_triade_y(raiz_ori, raiz_atual->dir, id, triade);
-        if (triade->z != NULL)
+        if (triade->z != NULL)// se achei o z
         {
             return;
         }
     }
     triade->y = NULL;
 }
-// Função para buscar x recursivamente 
+// Função para buscar x recursivamente pegando o mais a esq da arvore (minimo)
+// marcando o x caso for o mais a esquerda e buscando y, analisando na volta
 void buscar_triade_x(No_arvore *raiz_ori, No_arvore *raiz_atual, long int id, Triade *triade)
 {
-    if (triade->y != NULL)
+    if (triade->y != NULL)// se achar o y certo
     {
         return;
     }
     if (raiz_atual->esq != NULL)
     {
         buscar_triade_x(raiz_ori, raiz_atual->esq, id, triade);
-        if (triade->y != NULL)
+        if (triade->y != NULL)// se achar o y certo
         {
             return;
         }
     }
     triade->x = raiz_atual;
     buscar_triade_y(raiz_ori, raiz_ori, (id - triade->x->valor), triade);
-    if (triade->y != NULL)
+    if (triade->y != NULL)// se achar o y certo
     {
         return;
     }
@@ -105,6 +109,9 @@ void buscar_triade_x(No_arvore *raiz_ori, No_arvore *raiz_atual, long int id, Tr
     }
 }
 
+
+// Função que remove o sucessor, na verdade removendo o minimo e copiando os valores dele para raiz
+// Analisando se algum ponteiro da triade aponta para min e tratando o caso
 No_arvore *remover_sucessor(No_arvore *raiz, Triade *triade)
 {
 
@@ -138,7 +145,7 @@ No_arvore *remover_sucessor(No_arvore *raiz, Triade *triade)
     free(min);
     return raiz;
 }
-
+// Função para remover o devido triade requerido da arvore, para poder somar depois 
 No_arvore *remover_triade(No_arvore *raiz, long int chave, Triade* triade)
 {
     No_arvore *aux;
@@ -173,7 +180,7 @@ No_arvore *remover_triade(No_arvore *raiz, long int chave, Triade* triade)
         raiz->dir = remover_triade(raiz->dir, chave, triade);
     return raiz;
 }
-
+// Função para liberar cada nó dar arvore printada
 void liberar_no(No_arvore *no)
 {
     if (no == NULL)
@@ -185,7 +192,7 @@ void liberar_no(No_arvore *no)
     free(no);
     no = NULL;
 }
-
+// Função imprimindo a arvore na ordem requisitada recursivamente
 void imprimir_arvore(No_arvore *raiz)
 {
     if (raiz != NULL)
@@ -195,6 +202,7 @@ void imprimir_arvore(No_arvore *raiz)
         imprimir_arvore(raiz->dir);
     }
 }
+// Função para liberar a arvore 
 void liberar_arvore(No_arvore *raiz)
 {
     if (raiz == NULL)
@@ -217,46 +225,46 @@ int main()
     triade->y = NULL;
     triade->z = NULL;
 
-    while (scanf("%d %d", &m, &n) != EOF)
+    while (scanf("%d %d", &m, &n) != EOF)// leio até o fim do arquivo
     {
         for (int i = 0; i < m; i++)
         {
-            scanf("%ld \"%[^\"]\"", &valor, palavra);
+            scanf("%ld \"%[^\"]\"", &valor, palavra);// leio cada valor e palavra criando novo no
             No_arvore *novo_no = malloc(sizeof(No_arvore));
             strcpy(novo_no->palavra, palavra);
             novo_no->valor = valor;
             novo_no->dir = NULL;
             novo_no->esq = NULL;
-            raiz = inserir_arvore(raiz, novo_no);
+            raiz = inserir_arvore(raiz, novo_no);// insiro esse novo no na arvore
         }
         for (int i = 0; i < n; i++)
         {
             scanf("%ld", &id);
-            buscar_triade_x(raiz, raiz, id, triade);
-            strcpy(palavra_copia, triade->x->palavra);
-            valor_x = triade->x->valor;
-            strcat(palavra_copia, triade->y->palavra);
-            valor_y = triade->y->valor;
-            strcat(palavra_copia, triade->z->palavra);
-            valor_z = triade->z->valor;
-            valor_id = valor_x + valor_y + valor_z;
-            No_arvore *no_adc = malloc(sizeof(No_arvore));
+            buscar_triade_x(raiz, raiz, id, triade);// busco meu x y z na arvore
+            strcpy(palavra_copia, triade->x->palavra);// copio a string de x para palavra copia
+            valor_x = triade->x->valor;// copio o valor
+            strcat(palavra_copia, triade->y->palavra);// concateno as strings
+            valor_y = triade->y->valor;// copio o valor
+            strcat(palavra_copia, triade->z->palavra);// concateno as strings
+            valor_z = triade->z->valor;// copio o valor
+            valor_id = valor_x + valor_y + valor_z;// somo os valores
+            No_arvore *no_adc = malloc(sizeof(No_arvore));// crio o nono no para adicionar
             no_adc->dir = NULL;
             no_adc->esq = NULL;
-            strcpy(no_adc->palavra, palavra_copia);
-            no_adc->valor = valor_id;
-            raiz = inserir_arvore(raiz, no_adc);
-            raiz = remover_triade(raiz, triade->x->valor,triade);
+            strcpy(no_adc->palavra, palavra_copia);// copio a palavra formada para ele
+            no_adc->valor = valor_id;// copio o valor para novo no
+            raiz = inserir_arvore(raiz, no_adc);// insiro o novo no na raiz
+            raiz = remover_triade(raiz, triade->x->valor,triade);// removo os triades
             raiz = remover_triade(raiz, triade->y->valor,triade);
             raiz = remover_triade(raiz, triade->z->valor,triade);
-            strcpy(palavra_copia, "");
-            triade->x = NULL;
+            strcpy(palavra_copia, "");// seto a palavra com nada
+            triade->x = NULL;// seto null os triades
             triade->y = NULL;
             triade->z = NULL;
         }
-        imprimir_arvore(raiz);
+        imprimir_arvore(raiz);//imprimo a arvore
         puts("");
-        liberar_arvore(raiz);
+        liberar_arvore(raiz);//libero a arvore
         raiz = NULL;
     }
     free(triade);
