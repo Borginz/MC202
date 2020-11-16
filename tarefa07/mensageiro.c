@@ -73,7 +73,7 @@ void buscar_triade_y(No_arvore *raiz_ori, No_arvore *raiz_atual, long int id, Tr
     }
     if (raiz_atual->dir != NULL /*&& raiz_atual->valor < id*/)
     {
-        buscar_triade_y(raiz_ori, raiz_atual->dir, id, triade);
+        buscar_triade_y(raiz_ori, raiz_atual->dir, id, triade);//caso o outro teste de errado
         if (triade->z != NULL)// se achei o z
         {
             return;
@@ -103,7 +103,7 @@ void buscar_triade_x(No_arvore *raiz_ori, No_arvore *raiz_atual, long int id, Tr
     {
         return;
     }
-    if (raiz_atual->dir != NULL)
+    if (raiz_atual->dir != NULL)// caso o outro teste de errado
     {
         buscar_triade_x(raiz_ori, raiz_atual->dir, id, triade);
     }
