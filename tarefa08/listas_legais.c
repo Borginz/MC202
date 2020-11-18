@@ -90,9 +90,9 @@ void verificar_cada(no_arvore *raiz, long int *contador)
     if (raiz != NULL)
     {
         if (raiz->chave < raiz->contador){
-            contador += raiz->chave - raiz->contador; 
-        } else if(raiz->chave < raiz->contador){
-            contador += raiz->contador;
+            *contador += raiz->contador - raiz->chave; 
+        } else if(raiz->chave > raiz->contador){
+            *contador += raiz->contador;
         }
         verificar_cada(raiz->esq,contador);
         verificar_cada(raiz->dir,contador);
@@ -122,12 +122,12 @@ int main()
 {
     int qtd_inicial, qtd_opera,x;
     no_arvore *raiz = NULL;
-    long int *contador = 0,valor;
+    long int contador = 0,valor;
 
     scanf("%d %d", &qtd_inicial, &qtd_opera);
     for (int i = 0; i < qtd_inicial; i++)
     {
-        scanf("%ld", &valor);
+        scanf(" %ld", &valor);
         raiz = inserir(raiz, valor);
     }
     for (int i = 0; i < qtd_opera; i++)
@@ -136,17 +136,23 @@ int main()
         switch (x)
         {
         case 1:
-            scanf("%ld", &valor);
+            scanf(" %ld", &valor);
             inserir(raiz, valor);
             break;
         case 2:
-            scanf("%ld", &valor);
+            scanf(" %ld", &valor);
             no_arvore *esperado;
             esperado = buscar(raiz, valor);
-            printf("%ld\n", esperado->contador);
+            if (esperado){
+                printf("%ld\n", esperado->contador);
+            }
+            else{
+                printf("0\n");
+            }
+            
             break;
         case 3:
-            scanf("%ld", &valor);
+            contador = 0;
             verificar_cada(raiz, &contador);
             printf("%ld\n", contador);
             break;
