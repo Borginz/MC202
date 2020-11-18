@@ -15,7 +15,7 @@ typedef struct No_arvore
     long int contador;
 } no_arvore;
 
-int ehVermelho(no_arvore *x)
+int ehVermelho(no_arvore *x)//verificando se é vermelho
 {
     if (x == NULL)
         return 0;
@@ -28,7 +28,7 @@ int ehPreto(no_arvore *x)
     return x->cor == PRETO;
 }
 
-no_arvore *rotaciona_para_direita(no_arvore *raiz)
+no_arvore *rotaciona_para_direita(no_arvore *raiz)//rotacionar a arvore para a direita
 {
     no_arvore* x = raiz->esq;
     raiz->esq = x->dir;
@@ -38,14 +38,14 @@ no_arvore *rotaciona_para_direita(no_arvore *raiz)
     return x;
 }
 
-void sobe_vermelho(no_arvore *raiz)
+void sobe_vermelho(no_arvore *raiz)//tornar os filhos como preto e o pai vermelho
 {
     raiz->cor = VERMELHO;
     raiz->esq->cor = PRETO;
     raiz->dir->cor = PRETO;
 }
 
-no_arvore *rotaciona_para_esquerda(no_arvore *raiz)
+no_arvore *rotaciona_para_esquerda(no_arvore *raiz)//rotaciona a arvore para a esquerda
 {
     no_arvore *x = raiz->dir;
     raiz->dir = x->esq;
@@ -55,7 +55,7 @@ no_arvore *rotaciona_para_esquerda(no_arvore *raiz)
     return x;
 }
 
-no_arvore *inserir_rec(no_arvore *raiz, long int chave)
+no_arvore *inserir_rec(no_arvore *raiz, long int chave)//função para inserir recursivamente e contando +1 quando ja existir
 {
     no_arvore *novo;
     if (raiz == NULL)
@@ -85,13 +85,13 @@ no_arvore *inserir_rec(no_arvore *raiz, long int chave)
         sobe_vermelho(raiz);
     return raiz;
 }
-void verificar_cada(no_arvore *raiz, long int *contador)
+void verificar_cada(no_arvore *raiz, long int *contador)//função que veridica cada no
 {
     if (raiz != NULL)
     {
-        if (raiz->chave < raiz->contador){
+        if (raiz->chave < raiz->contador){// se tiver amais
             *contador += raiz->contador - raiz->chave; 
-        } else if(raiz->chave > raiz->contador){
+        } else if(raiz->chave > raiz->contador){//se tiver menos
             *contador += raiz->contador;
         }
         verificar_cada(raiz->esq,contador);
@@ -99,14 +99,14 @@ void verificar_cada(no_arvore *raiz, long int *contador)
     }
 }
 
-no_arvore *inserir(no_arvore *raiz, long int chave)
+no_arvore *inserir(no_arvore *raiz, long int chave)//insiro na arvore
 {
     raiz = inserir_rec(raiz, chave);
     raiz->cor = PRETO;
     return raiz;
 }
 
-no_arvore *buscar(no_arvore *raiz, long int k)
+no_arvore *buscar(no_arvore *raiz, long int k)//função para busca_binaria
 {
     if (k < 0)
         return NULL;
@@ -117,6 +117,31 @@ no_arvore *buscar(no_arvore *raiz, long int k)
     else
         return buscar(raiz->dir, k);
 }
+
+void liberar_no(no_arvore *no)
+{
+    if (no == NULL)
+    {
+        return;
+    }
+    liberar_no(no->esq);
+    liberar_no(no->dir);
+    free(no);
+    no = NULL;
+}
+
+
+
+void liberar_arvore(no_arvore *raiz)
+{
+    if (raiz == NULL)
+    {
+        return;
+    }
+    liberar_no(raiz);
+}
+
+
 
 int main()
 {
@@ -143,10 +168,10 @@ int main()
             scanf(" %ld", &valor);
             no_arvore *esperado;
             esperado = buscar(raiz, valor);
-            if (esperado){
+            if (esperado){// se encontrei
                 printf("%ld\n", esperado->contador);
             }
-            else{
+            else{//se nao encontrei
                 printf("0\n");
             }
             
@@ -158,4 +183,5 @@ int main()
             break;
         }
     }
+    liberar_arvore(raiz);
 }
