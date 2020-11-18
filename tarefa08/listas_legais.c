@@ -67,9 +67,9 @@ no_arvore *inserir_rec(no_arvore *raiz, long int chave)//função para inserir r
         novo->contador = 1;
         return novo;
     }
-    if (chave < raiz->chave)
+    if (chave < raiz->chave)//se a chave for menor
         raiz->esq = inserir_rec(raiz->esq, chave);
-    else if (chave > raiz->chave)
+    else if (chave > raiz->chave)//se a chave for maior
         raiz->dir = inserir_rec(raiz->dir, chave);
     else
     {
@@ -118,7 +118,7 @@ no_arvore *buscar(no_arvore *raiz, long int k)//função para busca_binaria
         return buscar(raiz->dir, k);
 }
 
-void liberar_no(no_arvore *no)
+void liberar_no(no_arvore *no)//liberando cada no
 {
     if (no == NULL)
     {
@@ -129,19 +129,6 @@ void liberar_no(no_arvore *no)
     free(no);
     no = NULL;
 }
-
-
-
-void liberar_arvore(no_arvore *raiz)
-{
-    if (raiz == NULL)
-    {
-        return;
-    }
-    liberar_no(raiz);
-}
-
-
 
 int main()
 {
@@ -167,7 +154,7 @@ int main()
         case 2:
             scanf(" %ld", &valor);
             no_arvore *esperado;
-            esperado = buscar(raiz, valor);
+            esperado = buscar(raiz, valor);//busco a chave para contar
             if (esperado){// se encontrei
                 printf("%ld\n", esperado->contador);
             }
@@ -178,10 +165,10 @@ int main()
             break;
         case 3:
             contador = 0;
-            verificar_cada(raiz, &contador);
+            verificar_cada(raiz, &contador);//verifico cada um dos no para ser lista legal
             printf("%ld\n", contador);
             break;
-        }
+        }   
     }
-    liberar_arvore(raiz);
+    liberar_no(raiz);
 }
