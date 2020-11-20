@@ -8,14 +8,14 @@
             "name": "(gdb) Iniciar",
             "type": "cppdbg",
             "request": "launch",
-            "program": "insira o nome do programa, por exemplo ${workspaceFolder}/a.exe",
-            "args": ["<testes/sala_de_espera1.in"],
+            "program": "${workspaceFolder}\\tarefa08\\listas_legais.exe",
+            "args": ["<testes/listas_legais6.in"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/path/to/gdb",
+            "miDebuggerPath": "gdb",
             "setupCommands": [
                 {
                     "description": "Habilitar a reformatação automática para gdb",

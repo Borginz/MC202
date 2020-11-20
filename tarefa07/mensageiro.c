@@ -7,7 +7,7 @@ typedef struct No_arvore
     struct No_arvore *dir;
     struct No_arvore *esq;
     long int valor;
-    char palavra[2050];
+    char palavra[2000];
 } No_arvore;
 
 typedef struct Triade
@@ -218,7 +218,7 @@ int main()
     int m, n;
     long int id = 0, valor_x = 0, valor_y = 0, valor_z = 0, valor_id = 0, valor = 0;
     No_arvore *raiz = NULL;
-    char palavra[2050], palavra_copia[2050];
+    char palavra[2000], palavra_copia[2000];
     Triade *triade;
     triade = malloc(sizeof(Triade));
     triade->x = NULL;
