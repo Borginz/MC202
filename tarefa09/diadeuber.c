@@ -91,6 +91,12 @@ FP *remover_procurado(FP *fprio, char procurado[])
     return fprio;
 }
 
+void liberar_heap(FP* fprio){
+    free(fprio->v);
+    free(fprio);
+    return;
+}
+
 int main()
 {
     int distancia_total = 0, distancia_cliente = 0, pos_mot_x = 0, pos_mot_y = 0,distancia_parcial = 0, distancia_viagem = 0;
@@ -163,4 +169,5 @@ int main()
             break;
         }
     }
+    liberar_heap(fprio);
 }
