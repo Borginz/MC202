@@ -84,7 +84,7 @@ FP *remover_procurado(FP *fprio, char procurado[])
         if (strcmp(fprio->v[i].Nome, procurado) == 0)
         {
             fprio->v[i].avaliacao = 6;
-            sobe_no_heap(fprio,6);
+            sobe_no_heap(fprio, i);
             extrai_maximo(fprio);
         }
     }
@@ -93,7 +93,7 @@ FP *remover_procurado(FP *fprio, char procurado[])
 
 int main()
 {
-    int distancia_total = 0, distancia_cliente = 0, pos_mot_x = 0,pos_mot_y = 0;
+    int distancia_total = 0, distancia_cliente = 0, pos_mot_x = 0, pos_mot_y = 0,distancia_parcial = 0, distancia_viagem = 0;
     char x;
     double liquido = 0, bruto = 0, despesas = 0;
     FP *fprio;
@@ -132,12 +132,13 @@ int main()
             break;
         case 'F':
             printf("A corrida de %s foi finalizada\n", cliente_atual.Nome);
-            distancia_total += abs(pos_mot_x - cliente_atual.pos_ini_x) + abs(pos_mot_y - cliente_atual.pos_ini_y);
-            distancia_cliente += abs(cliente_atual.pos_ini_x - cliente_atual.pos_fim_x) + abs(cliente_atual.pos_ini_y - cliente_atual.pos_fim_y);
-            distancia_total += distancia_cliente;
+            distancia_parcial = abs(pos_mot_x - cliente_atual.pos_ini_x) + abs(pos_mot_y - cliente_atual.pos_ini_y);
+            distancia_viagem = abs(cliente_atual.pos_ini_x - cliente_atual.pos_fim_x) + abs(cliente_atual.pos_ini_y - cliente_atual.pos_fim_y);
+            distancia_total += distancia_parcial + distancia_viagem;
+            distancia_cliente += distancia_viagem;
             pos_mot_x = cliente_atual.pos_fim_x;
             pos_mot_y = cliente_atual.pos_fim_y;
-            
+
             if (fprio->n > 0)
             {
                 cliente_atual = extrai_maximo(fprio);
@@ -148,12 +149,11 @@ int main()
             }
             break;
 
-
         case 'T':
-            despesas += (((distancia_total/10)*4.104) + 57);
-            bruto += distancia_cliente*1.4;
-            liquido += bruto - bruto*0.25 + despesas;
-            
+            despesas += (((distancia_total / 10.00) * 4.104) + 57);
+            bruto += distancia_cliente * 1.4;
+            liquido += bruto - ((bruto * 0.25) + despesas);
+
             printf("\n");
             printf("Jornada finalizada. Aqui esta o seu rendimento de hoje\n");
             printf("Km total: %d\n", distancia_total);
