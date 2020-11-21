@@ -19,14 +19,14 @@ typedef struct Fila_prioridade
     int n, tamanho;
 } FP;
 
-void troca(cliente *a, cliente *b)
+void troca(cliente *a, cliente *b)//Troca de posiçoes dos clientes
 {
     cliente t = *a;
     *a = *b;
     *b = t;
 }
 
-FP *criar_filaprio(int tam)
+FP *criar_filaprio(int tam)// Função para criar a FP
 {
     FP *fprio = malloc(sizeof(FP));
     fprio->v = malloc(tam * sizeof(cliente));
@@ -35,7 +35,7 @@ FP *criar_filaprio(int tam)
     return fprio;
 }
 
-void sobe_no_heap(FP *fprio, int k)
+void sobe_no_heap(FP *fprio, int k)//Ir subind na heap
 {
     if (k > 0 && fprio->v[PAI(k)].avaliacao < fprio->v[k].avaliacao)
     {
@@ -44,14 +44,14 @@ void sobe_no_heap(FP *fprio, int k)
     }
 }
 
-void insere(FP *fprio, cliente item)
+void insere(FP *fprio, cliente item)// inserir subindo no heap
 {
     fprio->v[fprio->n] = item;
     fprio->n++;
     sobe_no_heap(fprio, fprio->n - 1);
 }
 
-void desce_no_heap(FP *fprio, int k)
+void desce_no_heap(FP *fprio, int k)// ir descendo na heap
 {
     int maior_filho;
     if (F_ESQ(k) < fprio->n)
@@ -68,7 +68,7 @@ void desce_no_heap(FP *fprio, int k)
     }
 }
 
-cliente extrai_maximo(FP *fprio)
+cliente extrai_maximo(FP *fprio)//tirar o maximo da heap descendo na heap
 {
     cliente item = fprio->v[0];
     troca(&fprio->v[0], &fprio->v[fprio->n - 1]);
@@ -77,7 +77,7 @@ cliente extrai_maximo(FP *fprio)
     return item;
 }
 
-FP *remover_procurado(FP *fprio, char procurado[])
+FP *remover_procurado(FP *fprio, char procurado[])//Achar o que eu quero e seto 6 para subir pro maximo e retirar ele subindo
 {
     for (int i = 0; i < fprio->n; i++)
     {
@@ -91,7 +91,7 @@ FP *remover_procurado(FP *fprio, char procurado[])
     return fprio;
 }
 
-void liberar_heap(FP* fprio){
+void liberar_heap(FP* fprio){// libero o vetor e depois a FP
     free(fprio->v);
     free(fprio);
     return;
@@ -106,7 +106,7 @@ int main()
     fprio = criar_filaprio(250);
     cliente cliente_heap;
     cliente cliente_atual;
-    strcpy(cliente_atual.Nome, "Leonardo");
+    strcpy(cliente_atual.Nome, "Leonardo");// inicio o primeiro me homenageando
     cliente_atual.avaliacao = 0;
     cliente_atual.pos_fim_x = 0;
     cliente_atual.pos_fim_y = 0;
@@ -114,44 +114,44 @@ int main()
     cliente_atual.pos_ini_y = 0;
     char procurado[20];
 
-    while (scanf("%c ", &x) != EOF)
+    while (scanf("%c ", &x) != EOF)//ler até o fim do arquivo
     {
         switch (x)
         {
         case 'A':
             scanf("%s %lf %d %d %d %d", cliente_heap.Nome, &(cliente_heap.avaliacao), &(cliente_heap.pos_ini_x), &(cliente_heap.pos_ini_y), &(cliente_heap.pos_fim_x), &(cliente_heap.pos_fim_y));
-            if (cliente_atual.avaliacao != 0)
+            if (cliente_atual.avaliacao != 0)// vejo se a avaliação é zero pq foi meu set de atual vazio
             {
-                insere(fprio, cliente_heap);
+                insere(fprio, cliente_heap);// insiro na heap
             }
             else
             {
-                cliente_atual = cliente_heap;
+                cliente_atual = cliente_heap;// se nao tiver como avaliação 0 eu copio
             }
             printf("Cliente %s foi adicionado(a)\n", cliente_heap.Nome);
             break;
         case 'C':
             scanf("%s", procurado);
-            fprio = remover_procurado(fprio, procurado);
+            fprio = remover_procurado(fprio, procurado);// tiro o procurado
             bruto += 7;
             printf("%s cancelou a corrida\n", procurado);
             break;
         case 'F':
             printf("A corrida de %s foi finalizada\n", cliente_atual.Nome);
-            distancia_parcial = abs(pos_mot_x - cliente_atual.pos_ini_x) + abs(pos_mot_y - cliente_atual.pos_ini_y);
-            distancia_viagem = abs(cliente_atual.pos_ini_x - cliente_atual.pos_fim_x) + abs(cliente_atual.pos_ini_y - cliente_atual.pos_fim_y);
-            distancia_total += distancia_parcial + distancia_viagem;
-            distancia_cliente += distancia_viagem;
-            pos_mot_x = cliente_atual.pos_fim_x;
+            distancia_parcial = abs(pos_mot_x - cliente_atual.pos_ini_x) + abs(pos_mot_y - cliente_atual.pos_ini_y);//pego a distancia parcial até o cliente
+            distancia_viagem = abs(cliente_atual.pos_ini_x - cliente_atual.pos_fim_x) + abs(cliente_atual.pos_ini_y - cliente_atual.pos_fim_y);//pego a distancia da viagem
+            distancia_total += distancia_parcial + distancia_viagem;// somo as parcias até o cliente e a viagem dele e somo no total 
+            distancia_cliente += distancia_viagem;//somo a distancia de viagem com o cliente total
+            pos_mot_x = cliente_atual.pos_fim_x;//seto a distancia do motorista pro final da corrida 
             pos_mot_y = cliente_atual.pos_fim_y;
 
             if (fprio->n > 0)
             {
-                cliente_atual = extrai_maximo(fprio);
+                cliente_atual = extrai_maximo(fprio);// se tiver gente no vetor, eu tiro o maixmo pro cliente
             }
             else
             {
-                cliente_atual.avaliacao = 0;
+                cliente_atual.avaliacao = 0;// se nao eu seto o atual como avaliação 0
             }
             break;
 
