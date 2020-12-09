@@ -164,7 +164,7 @@ int main()
         hash->vetor[i] = NULL;
     }
     int a, b;
-    char palavra_ini[26];
+    char palavra_ini[26];//palavra auxiliar
     scanf("%d %d", &a, &b);
     for (int i = 0; i < a; i++)
     {
@@ -174,11 +174,11 @@ int main()
     for (int i = 0; i < b; i++)
     {
         scanf("%s", palavra_ini);
-        if (buscar_hash(hash, palavra_ini))
+        if (buscar_hash(hash, palavra_ini))//faço busca simples no hash
         {
             printf("verde\n");
         }
-        else if (verificar_amarelo(hash, palavra_ini))
+        else if (verificar_amarelo(hash, palavra_ini))//procuro cada caso do amarelo
         {
             printf("amarelo\n");
         }
