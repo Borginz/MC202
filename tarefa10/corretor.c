@@ -19,7 +19,7 @@ typedef struct Hash
 
 typedef struct Hash *p_hash;
 
-p_no adicionar_elemento(p_no lista, char palavra[])
+p_no adicionar_elemento(p_no lista, char palavra[])//adiciono na lista ligada atualizando o inicio e devolvo o inicio
 {
     p_no novo;
     novo = malloc(sizeof(No));
@@ -28,7 +28,7 @@ p_no adicionar_elemento(p_no lista, char palavra[])
     return novo;
 }
 
-int hashing(char *palavra)
+int hashing(char *palavra)//função pelo metodo da divisao do hash
 {
     int i, n = 0;
     for (i = 0; i < strlen(palavra); i++)
@@ -36,7 +36,7 @@ int hashing(char *palavra)
     return n;
 }
 
-void inserir(p_hash t, char *palavra)
+void inserir(p_hash t, char *palavra)//calculo o hash e adiciono na posição correta
 {
     int n = hashing(palavra);
     t->vetor[n] = adicionar_elemento(t->vetor[n], palavra);
@@ -45,29 +45,28 @@ void inserir(p_hash t, char *palavra)
 int buscar_lista(p_no lista, char *palavra)
 {
 
-    while (lista != NULL)
+    while (lista != NULL)//procuro até ser null
     {
-        if (strcmp(lista->palavra, palavra) == 0)
+        if (strcmp(lista->palavra, palavra) == 0)//comparo, se for igual achei
         {
             return 1;
         }
-        else
+        else// se n for atualizo até chegar no ultimo
         {
             lista = lista->prox;
         }
     }
-    return 0;
+    return 0;//devolvo falso se n achei
 }
 
-int buscar_hash(p_hash hash, char *palavra)
+int buscar_hash(p_hash hash, char *palavra)//pego o indice e busco na lista ligada
 {
     int n = hashing(palavra);
-    //printf(" a palavra %s tem hash:%d\n",palavra,n);
     int a = buscar_lista(hash->vetor[n], palavra);
     return a;
 }
 
-int verificar_amarelo(p_hash hash, char *palavra)
+int verificar_amarelo(p_hash hash, char *palavra)// Função que olha caso a caso do amarelo
 {
     int p;
     int w;
@@ -76,39 +75,37 @@ int verificar_amarelo(p_hash hash, char *palavra)
     strcpy(palavra_aux, palavra);
     strcpy(palavra_cop1, palavra);
 
-    for (int i = 0; i < strlen(palavra_aux); i++)
+    for (int i = 0; i < strlen(palavra_aux); i++)//marco o char que quero alterar
     {
-        char atual = palavra_aux[i];
+        char atual = palavra_aux[i];//salvo em atual
         for (int k = 0; k < 26; k++)
         {
-            palavra_aux[i] = k + 'a';
-            if (buscar_hash(hash, palavra_aux))
+            palavra_aux[i] = k + 'a';// vou mudando pelas palavras do alfabeto
+            if (buscar_hash(hash, palavra_aux))//busco no hash a tentativa
             {
                 return 1;
             }
         }
-        palavra_aux[i] = atual;
+        palavra_aux[i] = atual;//devolvo o char certo
     }
-    strcpy(palavra_aux, palavra);
-    strcpy(palavra_cop1, palavra);
 
     // verifiquei se trocando as letras funciona;
-    // devo agora tirar um caracter e procurar
+    // Devo agora adicionar um caracter e verificar 
     for (int i = 0; i <= strlen(palavra); i++)
     {
-        palavra_aux[i] = '\0';
+        palavra_aux[i] = '\0';//troco para '0\' para copiar antes disso
         for (int j = 0; palavra_aux[j] != '\0'; j++)
         {
-            palavra_cop1[j] = palavra_aux[j];
+            palavra_cop1[j] = palavra_aux[j];//copio tudo antes da marcação
         }
         for (p = i; palavra[p] != '\0'; p++)
         {
-            palavra_cop1[p + 1] = palavra[p];
+            palavra_cop1[p + 1] = palavra[p];//copio tudo depois da marcacao
         }
-        palavra_cop1[p + 1] = '\0';
+        palavra_cop1[p + 1] = '\0';//adiciono o '0\'
         for (int k = 0; k < 26; k++)
         {
-            palavra_cop1[i] = 'a' + k;
+            palavra_cop1[i] = 'a' + k;//testo todas as letras adicionando no meio
             if (buscar_hash(hash, palavra_cop1))
             {
                 return 1;
@@ -117,22 +114,23 @@ int verificar_amarelo(p_hash hash, char *palavra)
         strcpy(palavra_aux, palavra);
         strcpy(palavra_cop1, "");
     }
-    strcpy(palavra_cop1, "");
 
-    for (int m = 0; m < strlen(palavra); m++)
+
+    // Agora devo retirar um caracter e verificar 
+
+    for (int m = 0; m < strlen(palavra); m++)//marco onde eu quero retirar
     {
-        palavra_aux[m] = '\0';
+        palavra_aux[m] = '\0';//marco a posição
         for (int i = 0; palavra_aux[i] != '\0'; i++)
         {
-            palavra_cop1[i] = palavra[i];
+            palavra_cop1[i] = palavra[i];//copio tudo antes
         }
-        for (w = m; palavra[w] != '\0'; w++)
+        for (w = m; palavra[w] != '\0'; w++)//copio depois 
         {
             palavra_cop1[w] = palavra[w + 1];
         }
-        palavra_cop1[w + 1] = '\0';
-        //printf("%s\n", palavra_cop1);
-        if (buscar_hash(hash, palavra_cop1))
+        palavra_cop1[w + 1] = '\0';//adiciono a quebra no final
+        if (buscar_hash(hash, palavra_cop1))//busco
         {
             return 1;
         }
@@ -141,21 +139,8 @@ int verificar_amarelo(p_hash hash, char *palavra)
     }
     return 0;
 
-    /*for ( int m = 0; m < strlen(palavra); m++){
-        if ( m == strlen(palavra)-1){
-            if(buscar_hash(hash,palavra[]))
-        }
-        for ( int n = m+1; n < strlen(palavra); n++){
-            palavra_aux[n-1] = palavra_aux[n];
-        }
-        if(buscar_hash(hash,palavra_aux)){
-            return 1;
-        }
-        strcpy(palavra_aux, palavra);
-    }*/
-    //agora eu tenho que adicionar
 }
-void liberar_hash(p_hash hash)
+void liberar_hash(p_hash hash)//liberar a lista ligada do hash
 {
     p_no aux;
     for (int i = 0; i < MAX; i++)
@@ -173,8 +158,8 @@ void liberar_hash(p_hash hash)
 int main()
 {
     p_hash hash;
-    hash = malloc(sizeof(Hash));
-    for (int i = 0; i < MAX; i++)
+    hash = malloc(sizeof(Hash));//iniciar o hash
+    for (int i = 0; i < MAX; i++)// iniciar o vetor com null
     {
         hash->vetor[i] = NULL;
     }
