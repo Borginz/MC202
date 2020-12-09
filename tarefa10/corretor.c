@@ -182,7 +182,7 @@ int main()
         {
             printf("amarelo\n");
         }
-        else
+        else// se nao for verde ou amarelo eu sei que é vermelho
         {
             printf("vermelho\n");
         }
