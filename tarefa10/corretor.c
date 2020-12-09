@@ -4,20 +4,20 @@
 
 #define MAX 1783
 
-typedef struct
+typedef struct No
 {
     char palavra[26];
-    No *prox;
+    struct No *prox;
 } No;
 
-typedef No *p_no;
+typedef struct No *p_no;
 
-typedef struct
+typedef struct Hash
 {
     p_no vetor[MAX];
 } Hash;
 
-typedef Hash *p_hash;
+typedef struct Hash *p_hash;
 
 p_no adicionar_elemento(p_no lista, char palavra[])
 {
@@ -45,13 +45,16 @@ void inserir(p_hash t, char *palavra)
 int buscar_lista(p_no lista, char *palavra)
 {
 
-    while (strcmp(lista->palavra, palavra) != 0 && lista != NULL)
+    while (lista != NULL)
     {
-        lista = lista->prox;
-    }
-    if (lista)
-    {
-        return 1;
+        if (strcmp(lista->palavra, palavra) == 0)
+        {
+            return 1;
+        }
+        else
+        {
+            lista = lista->prox;
+        }
     }
     return 0;
 }
@@ -59,10 +62,10 @@ int buscar_lista(p_no lista, char *palavra)
 int buscar_hash(p_hash hash, char *palavra)
 {
     int n = hashing(palavra);
+    //printf(" a palavra %s tem hash:%d\n",palavra,n);
     int a = buscar_lista(hash->vetor[n], palavra);
     return a;
 }
-
 
 int verificar_amarelo(p_hash hash, char *palavra)
 {
@@ -71,7 +74,7 @@ int verificar_amarelo(p_hash hash, char *palavra)
     char palavra_aux[26];
     char palavra_cop1[26];
     strcpy(palavra_aux, palavra);
-    strcpy(palavra_cop1,palavra);
+    strcpy(palavra_cop1, palavra);
 
     for (int i = 0; i < strlen(palavra_aux); i++)
     {
@@ -86,35 +89,35 @@ int verificar_amarelo(p_hash hash, char *palavra)
         }
         palavra_aux[i] = atual;
     }
+    strcpy(palavra_aux, palavra);
+    strcpy(palavra_cop1, palavra);
+
     // verifiquei se trocando as letras funciona;
     // devo agora tirar um caracter e procurar
     for (int i = 0; i <= strlen(palavra); i++)
     {
         palavra_aux[i] = '\0';
-        for ( int j = 0; palavra_aux[j] != '\0'; j++){
+        for (int j = 0; palavra_aux[j] != '\0'; j++)
+        {
             palavra_cop1[j] = palavra_aux[j];
         }
-        for (p = i; palavra[p]!= '\0'; p++){
-            palavra_cop1[p+1] = palavra[p];
+        for (p = i; palavra[p] != '\0'; p++)
+        {
+            palavra_cop1[p + 1] = palavra[p];
         }
-        palavra_cop1[p+1] = '\0';
-        for ( int k = 0; k < 26; k++){
+        palavra_cop1[p + 1] = '\0';
+        for (int k = 0; k < 26; k++)
+        {
             palavra_cop1[i] = 'a' + k;
-            if ( buscar_hash(hash,palavra)){
+            if (buscar_hash(hash, palavra_cop1))
+            {
                 return 1;
             }
         }
-        strcpy(palavra_aux,palavra);
-        strcpy(palavra_cop1,"");
+        strcpy(palavra_aux, palavra);
+        strcpy(palavra_cop1, "");
     }
-
-
-
-
-
-
-
-        
+    strcpy(palavra_cop1, "");
 
     for (int m = 0; m < strlen(palavra); m++)
     {
@@ -125,15 +128,16 @@ int verificar_amarelo(p_hash hash, char *palavra)
         }
         for (w = m; palavra[w] != '\0'; w++)
         {
-            palavra_cop1[w] = palavra[w+1];
+            palavra_cop1[w] = palavra[w + 1];
         }
-        palavra_cop1[w+1] = '\0';
-        printf("%s\n", palavra_cop1);
-        if ( buscar_hash(hash, palavra)){
+        palavra_cop1[w + 1] = '\0';
+        //printf("%s\n", palavra_cop1);
+        if (buscar_hash(hash, palavra_cop1))
+        {
             return 1;
         }
         strcpy(palavra_cop1, "");
-        strcpy(palavra_aux,palavra);
+        strcpy(palavra_aux, palavra);
     }
     return 0;
 
@@ -151,34 +155,52 @@ int verificar_amarelo(p_hash hash, char *palavra)
     }*/
     //agora eu tenho que adicionar
 }
+void liberar_hash(p_hash hash)
+{
+    p_no aux;
+    for (int i = 0; i < MAX; i++)
+    {
+        while (hash->vetor[i]){
+            aux = hash->vetor[i];
+            hash->vetor[i] = hash->vetor[i]->prox;
+            free(aux);
+
+        }
+    }
+    free(hash);
+}
 
 int main()
 {
     p_hash hash;
-    hash->vetor[1513];
+    hash = malloc(sizeof(Hash));
+    for (int i = 0; i < MAX; i++)
+    {
+        hash->vetor[i] = NULL;
+    }
     int a, b;
     char palavra_ini[26];
     scanf("%d %d", &a, &b);
     for (int i = 0; i < a; i++)
     {
         scanf("%s", palavra_ini);
-        inserir(&hash, palavra_ini);
+        inserir(hash, palavra_ini);
     }
     for (int i = 0; i < b; i++)
     {
         scanf("%s", palavra_ini);
-        if (buscar_hash(&hash, palavra_ini))
+        if (buscar_hash(hash, palavra_ini))
         {
             printf("verde\n");
         }
-        else if (verificar_amarelo(&hash, palavra_ini))
+        else if (verificar_amarelo(hash, palavra_ini))
         {
             printf("amarelo\n");
         }
         else
         {
-            printf("vermlho\n");
+            printf("vermelho\n");
         }
     }
-    //liberar_hash
+    liberar_hash(hash);
 }
