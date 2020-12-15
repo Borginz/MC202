@@ -16,7 +16,6 @@ typedef struct Hash
 {
     p_no vetor[MAX];
 } Hash;
-
 typedef struct Hash *p_hash;
 
 p_no adicionar_elemento(p_no lista, char palavra[])//adiciono na lista ligada atualizando o inicio e devolvo o inicio
@@ -75,21 +74,23 @@ int verificar_amarelo(p_hash hash, char *palavra)// Função que olha caso a cas
     strcpy(palavra_aux, palavra);
     strcpy(palavra_cop1, palavra);
 
-    for (int i = 0; i < strlen(palavra_aux); i++)//marco o char que quero alterar
+
+    // verifiquei se trocando as letras funciona
+    for (int i = 0; i < strlen(palavra_aux); i++)
     {
-        char atual = palavra_aux[i];//salvo em atual
+        char atual = palavra_aux[i];
         for (int k = 0; k < 26; k++)
         {
-            palavra_aux[i] = k + 'a';// vou mudando pelas palavras do alfabeto
-            if (buscar_hash(hash, palavra_aux))//busco no hash a tentativa
+            palavra_aux[i] = k + 'a';
+            if (buscar_hash(hash, palavra_aux))
             {
                 return 1;
             }
         }
-        palavra_aux[i] = atual;//devolvo o char certo
+        palavra_aux[i] = atual;
     }
 
-    // verifiquei se trocando as letras funciona;
+    
     // Devo agora adicionar um caracter e verificar 
     for (int i = 0; i <= strlen(palavra); i++)
     {
@@ -100,7 +101,7 @@ int verificar_amarelo(p_hash hash, char *palavra)// Função que olha caso a cas
         }
         for (p = i; palavra[p] != '\0'; p++)
         {
-            palavra_cop1[p + 1] = palavra[p];//copio tudo depois da marcacao
+            palavra_cop1[p+1] = palavra[p];//copio tudo depois da marcacao
         }
         palavra_cop1[p + 1] = '\0';//adiciono o '0\'
         for (int k = 0; k < 26; k++)
@@ -164,8 +165,10 @@ int main()
         hash->vetor[i] = NULL;
     }
     int a, b;
-    char palavra_ini[26];//palavra auxiliar
+    char palavra_ini[26];
     scanf("%d %d", &a, &b);
+    
+    // insere todas as palavras do dicionario
     for (int i = 0; i < a; i++)
     {
         scanf("%s", palavra_ini);

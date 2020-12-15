@@ -1,0 +1,3 @@
+A ordenação por seleção ou selection sort consiste em selecionar o menor ou maior item e colocar na primeira posição, 
+selecionar o segundo menor item e colocar na segunda posição, 
+segue estes passos até que reste um único elemento. Logo quando for empatado ele deixara do jeito que estava no vetor, sendo estavel
