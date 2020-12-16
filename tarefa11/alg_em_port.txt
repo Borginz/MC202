@@ -18,9 +18,6 @@ max = criar_matriz_distancia(vetor_grafo,contador_total,matriz_dist);
 resposta  = calcula_limitante();
 printo resposta
 
-iterar no vetor de lugias procurando a partir da origem o lugia[i] com o limitante
-
-vejo se há caminho com aquele 
 
 
 int calcula_limitante(inf,limitante){
