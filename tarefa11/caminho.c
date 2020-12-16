@@ -21,7 +21,7 @@ p_no insere_lista(p_no lista, int contador_total, double coord_x_atual, double c
     novo->prox = lista;
     return novo;
 }
-// Função que inicia com null cada posição do vetor
+// Função que inicia com null cada posição do vetor.
 p_no *iniciar_vetor(int n)
 {
     p_no *vetor;
