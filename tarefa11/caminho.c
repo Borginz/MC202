@@ -40,17 +40,14 @@ p_no *montar_grafo(p_no *grafo, p_no lista, int n)
 
     while (lista)
     {
-        //fprintf(stderr,"valor de x : %lf valor de y : %lf\n", lista->x,lista->y);
         novo = malloc(sizeof(No));
         novo->x = lista->x;
         novo->y = lista->y;
         novo->identificador = lista->identificador;
         novo->prox = NULL;
         grafo[idx] = novo;
-        //fprintf(stderr, "valor de x : %lf valor de y : %lf Indice: %d\n", grafo[idx]->x, grafo[idx]->y, idx);
         idx--;
         lista = lista->prox;
-        //fprintf(stderr,"valor de x_2 : %lf valor de y_2 : %lf\n", novo->x,novo->y);
     }
     return grafo;
 }
@@ -68,9 +65,6 @@ int criar_matriz_dist(p_no *vetor, int n, int **matriz)
             int dist_int = ceil(distancia);
             matriz[i][j] = dist_int;
             matriz[j][i] = dist_int;
-            //fprintf(stderr,"valor x : %lf valor y: %lf\n",vetor[i]->x, vetor[i]->y);
-            //fprintf(stderr,"valor x_2 : %lf valor y_2 : %lf\n",vetor[j]->x, vetor[j]->y);
-            //fprintf(stderr,"i = %d  j = %d  distancia:%d\n",i,j,dist_int);
             if (dist_int > limitante)
             {
                 limitante = dist_int;
@@ -133,15 +127,39 @@ int calcular_limitante(int inf, int limitante, int idx_origem, p_no *vetor, int 
         {
             inf = media + 1;
         }
-        
     }
-    //fprintf(stderr,"limitante: %d\n", limitante);
-    //fprintf(stderr,"resposta: %d\n", resposta);
+
     return resposta;
-    
-    
-    
 }
+
+void liberar_lista(p_no lista)
+{
+    p_no aux;
+    
+        while (lista){
+            aux = lista;
+            lista = lista->prox;
+            free(aux);
+        }    
+
+}
+
+void liberar_vetor(p_no *vetor, int m){
+    for( int i = 0; i < m; i++){
+        free(vetor[i]);
+    }
+    free(vetor);
+
+}
+
+void liberar_matriz(int **M, int m)
+{
+    int i;
+    for (i = 0; i < m; i++)
+        free(M[i]);
+    free(M);
+}
+
 int main()
 {
     double origem_x = 0, origem_y = 0, coord_x_atual = 0, coord_y_atual = 0;
@@ -163,9 +181,9 @@ int main()
     vetor_grafo = montar_grafo(vetor_grafo, lista, contador_total);
     matriz_dist = iniciar_matriz(contador_total);
     limitante = criar_matriz_dist(vetor_grafo, contador_total, matriz_dist);
-    //fprintf(stderr,"%d\n",matriz_dist[0][4]);
-    //limitante = 1000;
-    //fprintf(stderr, "%d\n", limitante);
     resposta = calcular_limitante(0, limitante, idx_origem, vetor_grafo, contador_total, matriz_dist);
     printf("%d\n", resposta);
+    liberar_matriz(matriz_dist,contador_total);
+    liberar_vetor(vetor_grafo, contador_total);
+    liberar_lista(lista);
 }
