@@ -103,7 +103,7 @@ int busca_rec(p_no *vetor, int *visitado, int v, int limitante, int n, int **mat
                 return 1;
     return 0;
 }
-// Função que devolve se encontrou um caminhho a partir da origem para um limitante
+// Função que devolve se encontrou um caminhho a partir da origem para um limitante.
 int existe_caminho(p_no *vetor, int idx_origem, int limitante, int contador_total, int **matriz)
 {
     int encontrou, i, *visitado = malloc(contador_total * sizeof(int));
