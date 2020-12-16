@@ -10,7 +10,7 @@ typedef struct No
 } No;
 
 typedef struct No *p_no;
-
+// Função para copiar todos os parametros e criar um novo no adicionando no inicio da lista ligada
 p_no insere_lista(p_no lista, int contador_total, double coord_x_atual, double coord_y_atual, char identificador)
 {
     p_no novo;
@@ -21,7 +21,7 @@ p_no insere_lista(p_no lista, int contador_total, double coord_x_atual, double c
     novo->prox = lista;
     return novo;
 }
-
+// Função que inicia com null cada posição do vetor
 p_no *iniciar_vetor(int n)
 {
     p_no *vetor;
@@ -32,6 +32,7 @@ p_no *iniciar_vetor(int n)
     }
     return vetor;
 }
+// Função que copia todos os nos da lista ligada para o vetor grafo
 p_no *montar_grafo(p_no *grafo, p_no lista, int n)
 {
     p_no novo;
@@ -51,7 +52,7 @@ p_no *montar_grafo(p_no *grafo, p_no lista, int n)
     }
     return grafo;
 }
-
+// Função que calcula a maior arresta dois a dois do grafo, criando uma matriz de distancia
 int criar_matriz_dist(p_no *vetor, int n, int **matriz)
 {
     int limitante = 0;
@@ -73,6 +74,8 @@ int criar_matriz_dist(p_no *vetor, int n, int **matriz)
     }
     return limitante;
 }
+
+// Função que cria matriz de distancia e inica com tudo 0 
 int **iniciar_matriz(int n)
 {
     int **matriz = (int **)malloc(n * sizeof(int *));
@@ -87,7 +90,7 @@ int **iniciar_matriz(int n)
     }
     return matriz;
 }
-
+// Função que vai percorrendo até achar um lugia e com condição de ser menor que o limitante
 int busca_rec(p_no *vetor, int *visitado, int v, int limitante, int n, int **matriz)
 {
     int w;
@@ -100,7 +103,7 @@ int busca_rec(p_no *vetor, int *visitado, int v, int limitante, int n, int **mat
                 return 1;
     return 0;
 }
-
+// Função que devolve se encontrou um caminhho a partir da origem para um limitante
 int existe_caminho(p_no *vetor, int idx_origem, int limitante, int contador_total, int **matriz)
 {
     int encontrou, i, *visitado = malloc(contador_total * sizeof(int));
@@ -110,20 +113,20 @@ int existe_caminho(p_no *vetor, int idx_origem, int limitante, int contador_tota
     free(visitado);
     return encontrou;
 }
-
+// Função que calcula o limitante por busca binaria para otimizar o codigo, sendo a resposta o ultimo elemento
 int calcular_limitante(int inf, int limitante, int idx_origem, p_no *vetor, int contador_total, int **matriz)
 {
     int resposta = 0;
 
-    while (inf < limitante)
+    while (inf < limitante)//verificação dos limites
     {
         int media = ((inf + limitante) / 2);
-        if (existe_caminho(vetor, idx_origem, media, contador_total, matriz))
+        if (existe_caminho(vetor, idx_origem, media, contador_total, matriz))// se existir caminho sei que é menor que o atual
         {
             resposta = media;
             limitante = media;
         }
-        else
+        else// se nao existir sei que esta para cima
         {
             inf = media + 1;
         }
@@ -131,7 +134,7 @@ int calcular_limitante(int inf, int limitante, int idx_origem, p_no *vetor, int 
 
     return resposta;
 }
-
+// libero lista
 void liberar_lista(p_no lista)
 {
     p_no aux;
@@ -143,7 +146,7 @@ void liberar_lista(p_no lista)
         }    
 
 }
-
+//libero vetor
 void liberar_vetor(p_no *vetor, int m){
     for( int i = 0; i < m; i++){
         free(vetor[i]);
@@ -151,7 +154,7 @@ void liberar_vetor(p_no *vetor, int m){
     free(vetor);
 
 }
-
+//libero matriz
 void liberar_matriz(int **M, int m)
 {
     int i;
@@ -178,9 +181,9 @@ int main()
         contador_total++;
     }
     vetor_grafo = iniciar_vetor(contador_total);
-    vetor_grafo = montar_grafo(vetor_grafo, lista, contador_total);
+    vetor_grafo = montar_grafo(vetor_grafo, lista, contador_total);//monto o grafo a partir da lista_ligada
     matriz_dist = iniciar_matriz(contador_total);
-    limitante = criar_matriz_dist(vetor_grafo, contador_total, matriz_dist);
+    limitante = criar_matriz_dist(vetor_grafo, contador_total, matriz_dist);// a maior aresta que existe
     resposta = calcular_limitante(0, limitante, idx_origem, vetor_grafo, contador_total, matriz_dist);
     printf("%d\n", resposta);
     liberar_matriz(matriz_dist,contador_total);
