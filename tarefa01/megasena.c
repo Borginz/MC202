@@ -36,8 +36,8 @@ Função para verificar cada matriz com os numeros:
 void ler_matriz(int matriz[][60], int m){
     int i,j;
 
-    for ( i = 0; i < m; i++)
-        for ( j = 0; j < 60; j++)
+    for ( i = 0; i < m; i++) 
+        for ( j = 0; j < 60; j++) 
         scanf(" %d", &matriz[i][j]);
 }
 
