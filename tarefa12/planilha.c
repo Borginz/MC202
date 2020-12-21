@@ -1,8 +1,49 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+
+#define MAX_PILHA (25)
+
+typedef struct pilha
+{
+    int pilha[MAX_PILHA]; 
+    int tamanho;
+}*Pilha;
+
+Pilha nova_pilha(){
+    return NULL;
+}
+
+void destruir_pilha(Pilha pilha){
+}
+
+void empilha(int valor, Pilha pilha){
+
+}
+
+int pop(Pilha pilha){
+    return 0;
+}
+
+
+bool eh_letra(char c){
+    return false;
+}
+
+typedef struct resultado
+{
+    int resultado;
+    bool erro;
+}Resultado;
+
+const Resultado ERRO = {0,true};
+
+
 typedef struct No
 {
-    char token[5];
+    char token[10];
     struct No *prox;
 } No;
 
@@ -12,39 +53,57 @@ typedef struct No_dummy
 {
     No *ini;
     No *fim;
-} dummy;
-No **iniciar_matriz(int n, int m)
+    bool visitando;
+} deque;
+deque **iniciar_matriz(int altura, int largura)
 {
-    No **matriz = (No **)malloc(n * sizeof(No *));
+    deque **matriz = malloc(altura * sizeof(deque *));
 
-    for (char i = 0; i < n; i++)
+    for (char i = 0; i < altura; i++)
     {
-        matriz[i] = (No *)malloc(m * sizeof(No));
+        matriz[i] = calloc(largura , sizeof(deque));
     }
     return matriz;
 }
 
-No **ler_csv(No**matriz, int n, int m, FILE *arquivo)
+void inserir_lista_final(char *token, deque *cabeca){// colocar no final do deque
+    No *novo_no = malloc(sizeof(No));
+    strcpy(novo_no->token, token);
+    novo_no->prox = NULL;
+    if (cabeca->fim){
+        cabeca->fim->prox = novo_no;
+        cabeca->fim = novo_no;
+    } else{
+        cabeca->ini = novo_no;
+        cabeca->fim = novo_no;
+    }
+}
+
+
+
+
+deque **ler_csv(deque **matriz, int altura, int largura, FILE *arquivo)
 {
-    No novo;
-    char linha[15];
+    char *linha;
     char *token;
     char aux[5];
 
-    for (int i = 0; i < n-1; i++)
+    for (int num_linha = 0; num_linha < altura; num_linha++)
     {
-        fscanf(arquivo, " %[^,],", linha);
-        token = strtok(linha, " ");
-        while (token != NULL)
+        for (int num_coluna = 0; num_coluna < largura; num_coluna++)
         {
-            inserir_lista(token);
-            token = strtok(NULL, " ");
+            fscanf(arquivo, " %m[^,\n]%*[,\n]", &linha);
+            token = strtok(linha, " ");
+            while (token != NULL)
+            {
+                inserir_lista_final(token,&(matriz[num_linha][num_coluna]));
+                token = strtok(NULL, " ");
+            }
         }
     }
-    fscanf(arquivo," %[^\n]\n", linha);
+
     return matriz;
 }
-
 
 /*int ler_parenteses(char *celula, char ***matriz)
 {
@@ -60,48 +119,103 @@ No **ler_csv(No**matriz, int n, int m, FILE *arquivo)
 
     sscanf(celula, " ")
 }*/
+Resultado ler_celula(char *coordenada, deque **matriz);
 
-int ler_celula(char *coordenada, char ***matriz)
+
+
+Resultado resolver_pilha(p_no inicio, deque **matriz){
+    Pilha valores = nova_pilha();
+    Pilha operadores = nova_pilha();
+
+    while(inicio){
+        if (eh_letra(inicio->token[0])){
+            Resultado rv = ler_celula(inicio->token, matriz);
+            if(rv.erro){
+                destruir_pilha(valores);
+                destruir_pilha(operadores);
+                return ERRO;
+            } else{
+                empilha(rv.resultado,valores);
+            }
+        } else if (inicio->token[0] == '+'){
+            empilha('+',operadores);
+        } else if (inicio->token[0] == '-'){
+            empilha('-',operadores);
+        } else if ( inicio->token[0] == ')'){
+            int b = pop(valores);
+            int a = pop(valores);
+            if(pop(operadores) == '+'){
+                empilha(a+b,valores);
+            } else{
+                empilha(a-b,valores);
+            }
+        }     
+        inicio = inicio->prox;
+    }
+    Resultado rv = {pop(valores), false};
+    destruir_pilha(valores);
+    destruir_pilha(operadores);
+    return rv;
+}
+
+
+Resultado ler_celula(char *coordenada, deque **matriz)
 {
     char x_letra[2];
     int x, y, constante;
+
+
     sscanf(coordenada, " %[A-Z]%d", x_letra, &y);
     x = x_letra[0] - 'A';
     y -= 1;
-    char *celula = matriz[y][x];
+    
+    if ( matriz[y][x].visitando){
+        return ERRO; 
+    }
+    
+    p_no inicio = matriz[y][x].ini;
+    if (inicio->token[0] == '='){
+        
+        matriz[y][x].visitando = true;
+        Resultado rv = resolver_pilha(inicio,matriz);
+        matriz[y][x].visitando = false;
+        return rv;
 
-    if (sscanf(celula, " %d", &constante) != 0)
-    {
-        return constante;
+    } else{
+        Resultado rv;
+        sscanf(inicio->token,"%d", &rv.resultado);
+        rv.erro = false;
+        return rv;
     }
-    else if (sscanf(celula, " %[A-Z]") != 0)
-    {
-        return ler_celula(celula, matriz);
-    }
-    else
-    {
-        return ler_parenteses(celula, matriz);
-    }
+
 }
 
 int main()
 {
     char *nome_arquivo;
-    int m, n, valor_celula;
+    int altura, largura;
     scanf("%ms", &nome_arquivo);
-    scanf("%d %d", &m, &n);
+    scanf("%d %d", &largura, &altura);
     FILE *arquivo = fopen(nome_arquivo, "r");
-    char r, celula[5], *valor_alterar, ***matriz;
-    matriz = iniciar_matriz(n, m);
-    matriz = ler_csv(matriz, n, m, arquivo);
+    char r, celula[5], *valor_alterar;
+    deque **matriz;
+    
+    matriz = iniciar_matriz(altura, largura);
+    matriz = ler_csv(matriz, altura, largura, arquivo);
 
     while (fscanf(arquivo, "%c", &r) != EOF)
     {
         if (r == 'G')
         {
+            Resultado valor_celula;
             scanf("%s", celula);
             valor_celula = ler_celula(celula, matriz);
-            printf("%s: %d\n", celula, valor_celula);
+            if ( valor_celula.erro){
+                printf("%s: #ERRO#\n", celula);
+            } else{
+                printf("%s: %d\n", celula, valor_celula.resultado);
+            }
+            
         }
         else
         {
