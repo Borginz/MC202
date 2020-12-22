@@ -10,27 +10,29 @@ typedef struct pilha
 {
     int pilha[MAX_PILHA]; 
     int tamanho;
-}*Pilha;
+}Pilha;
 
-Pilha nova_pilha(){
-    return NULL;
+Pilha* nova_pilha(){
+    Pilha *nova = malloc(sizeof(Pilha));
+    nova->tamanho = 0;
+    return nova;
 }
 
-void destruir_pilha(Pilha pilha){
+void destruir_pilha(Pilha* pilha){
+    free(pilha);
 }
 
-void empilha(int valor, Pilha pilha){
-
+void empilha(int valor, Pilha* pilha){
+    pilha->tamanho++;
+    pilha->pilha[pilha->tamanho - 1] = valor;
 }
 
-int pop(Pilha pilha){
-    return 0;
+int pop(Pilha* pilha){
+    int rv = pilha->pilha[pilha->tamanho - 1];
+    pilha->tamanho--;
+    return rv;
 }
 
-
-bool eh_letra(char c){
-    return false;
-}
 
 typedef struct resultado
 {
@@ -59,7 +61,7 @@ deque **iniciar_matriz(int altura, int largura)
 {
     deque **matriz = malloc(altura * sizeof(deque *));
 
-    for (char i = 0; i < altura; i++)
+    for (int i = 0; i < altura; i++)
     {
         matriz[i] = calloc(largura , sizeof(deque));
     }
@@ -82,11 +84,11 @@ void inserir_lista_final(char *token, deque *cabeca){// colocar no final do dequ
 
 
 
+
 deque **ler_csv(deque **matriz, int altura, int largura, FILE *arquivo)
 {
     char *linha;
     char *token;
-    char aux[5];
 
     for (int num_linha = 0; num_linha < altura; num_linha++)
     {
@@ -121,11 +123,15 @@ deque **ler_csv(deque **matriz, int altura, int largura, FILE *arquivo)
 }*/
 Resultado ler_celula(char *coordenada, deque **matriz);
 
-
+int eh_letra(char c){
+    if ( 'A' <= c && c <= 'Z')
+        return 1;
+    return 0;
+}
 
 Resultado resolver_pilha(p_no inicio, deque **matriz){
-    Pilha valores = nova_pilha();
-    Pilha operadores = nova_pilha();
+    Pilha *valores = nova_pilha();
+    Pilha *operadores = nova_pilha();
 
     while(inicio){
         if (eh_letra(inicio->token[0])){
@@ -141,7 +147,7 @@ Resultado resolver_pilha(p_no inicio, deque **matriz){
             empilha('+',operadores);
         } else if (inicio->token[0] == '-'){
             empilha('-',operadores);
-        } else if ( inicio->token[0] == ')'){
+        } else if (inicio->token[0] == ')'){
             int b = pop(valores);
             int a = pop(valores);
             if(pop(operadores) == '+'){
@@ -162,14 +168,11 @@ Resultado resolver_pilha(p_no inicio, deque **matriz){
 Resultado ler_celula(char *coordenada, deque **matriz)
 {
     char x_letra[2];
-    int x, y, constante;
-
-
+    int x, y;
     sscanf(coordenada, " %[A-Z]%d", x_letra, &y);
     x = x_letra[0] - 'A';
     y -= 1;
-    
-    if ( matriz[y][x].visitando){
+    if (matriz[y][x].visitando){
         return ERRO; 
     }
     
@@ -184,33 +187,68 @@ Resultado ler_celula(char *coordenada, deque **matriz)
     } else{
         Resultado rv;
         sscanf(inicio->token,"%d", &rv.resultado);
+        //fprintf(stderr," Resultado : %d\n", rv.resultado);
         rv.erro = false;
         return rv;
     }
 
 }
 
+char* alterar(char * coordenada, char* alterando, deque **matriz){
+    char x_letra[2];
+    char *rv;
+    rv = malloc(5 * sizeof(char));
+    int x, y;
+    sscanf(coordenada, " %[A-Z]%d", x_letra, &y);
+    x = x_letra[0] - 'A';
+    y -= 1;
+    strcpy(rv,matriz[y][x].ini->token);
+    strcpy(matriz[y][x].ini->token, alterando);
+    return rv;
+
+}
+
+void liberar_lista(p_no lista)
+{
+    p_no aux;
+        while (lista){
+            aux = lista;
+            lista = lista->prox;
+            free(aux);
+        }    
+
+}
+
+void liberar_matriz(deque **M, int altura, int largura)
+{
+    for (int i  = 0; i < altura; i++)
+        for ( int j = 0; j < largura;j++){
+            liberar_lista(M[altura][largura].ini);
+        }
+    for (int k = 0; k < altura; k++)
+        free(M[k]);
+    free(M);
+} 
 int main()
 {
     char *nome_arquivo;
     int altura, largura;
+    char r, celula[5], *valor_alterar, *valor_antigo;
+    deque **matriz;
     scanf("%ms", &nome_arquivo);
     scanf("%d %d", &largura, &altura);
-    FILE *arquivo = fopen(nome_arquivo, "r");
-    char r, celula[5], *valor_alterar;
-    deque **matriz;
-    
     matriz = iniciar_matriz(altura, largura);
+    FILE *arquivo = fopen(nome_arquivo, "r");
     matriz = ler_csv(matriz, altura, largura, arquivo);
-
-    while (fscanf(arquivo, "%c", &r) != EOF)
+    fclose(arquivo);
+    while (scanf(" %c", &r) != EOF)
     {
         if (r == 'G')
         {
             Resultado valor_celula;
             scanf("%s", celula);
             valor_celula = ler_celula(celula, matriz);
-            if ( valor_celula.erro){
+            if (valor_celula.erro){
                 printf("%s: #ERRO#\n", celula);
             } else{
                 printf("%s: %d\n", celula, valor_celula.resultado);
@@ -221,9 +259,11 @@ int main()
         {
             scanf("%s", celula);
             scanf("%ms", &valor_alterar);
-            printf("%s: %s -> ", celula, valor_alterar);
+            valor_antigo = alterar(celula,valor_alterar, matriz);
+            printf("%s: %s -> %s\n", celula, valor_antigo ,valor_alterar);
         }
     }
-    fclose(arquivo);
+    //liberar_matriz(matriz, altura,largura);
+    
     return 0;
 }

@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/planilha",
-            "args": ["<testes/planilha3.in"],
+            "args": ["<testes/planilha1.in"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
