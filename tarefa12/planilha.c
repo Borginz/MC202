@@ -4,38 +4,13 @@
 #include <stdlib.h>
 
 #define MAX_PILHA (25)
+#define MAX_LETRA (2)
 
 typedef struct pilha
 {
     int pilha[MAX_PILHA];
     int tamanho;
 } Pilha;
-
-Pilha *nova_pilha()
-{
-    Pilha *nova = malloc(sizeof(Pilha));
-    nova->tamanho = 0;
-    return nova;
-}
-
-void destruir_pilha(Pilha *pilha)
-{
-    free(pilha);
-}
-
-void empilha(int valor, Pilha *pilha)
-{
-    pilha->tamanho++;
-    pilha->pilha[pilha->tamanho - 1] = valor;
-}
-
-int pop(Pilha *pilha)
-{
-    int rv = pilha->pilha[pilha->tamanho - 1];
-    pilha->tamanho--;
-    return rv;
-}
-
 typedef struct resultado
 {
     int resultado;
@@ -58,6 +33,35 @@ typedef struct No_dummy
     No *fim;
     bool visitando;
 } deque;
+
+Pilha *nova_pilha()
+{
+    Pilha *nova = malloc(sizeof(Pilha));
+    nova->tamanho = 0;
+    return nova;
+}
+
+void destruir_pilha(Pilha *pilha)
+{
+    free(pilha);
+}
+// Função que coloca na ultima pos do vetor 
+void empilha(int valor, Pilha *pilha)
+{
+    pilha->tamanho++;
+    pilha->pilha[pilha->tamanho - 1] = valor;
+}
+// Função que pega o topo da pilha
+int pop(Pilha *pilha)
+{
+    int rv = pilha->pilha[pilha->tamanho - 1];
+    pilha->tamanho--;
+    return rv;
+}
+
+
+
+// Função para inicializar a matriz com 0
 deque **iniciar_matriz(int altura, int largura)
 {
     deque **matriz = malloc(altura * sizeof(deque *));
@@ -68,9 +72,9 @@ deque **iniciar_matriz(int altura, int largura)
     }
     return matriz;
 }
-
+// Função para inserir no final da lista ligada
 void inserir_lista_final(char *token, deque *cabeca)
-{ // colocar no final do deque
+{
     No *novo_no = malloc(sizeof(No));
     strcpy(novo_no->token, token);
     novo_no->prox = NULL;
@@ -85,7 +89,7 @@ void inserir_lista_final(char *token, deque *cabeca)
         cabeca->fim = novo_no;
     }
 }
-
+// Função que insere na matriz o valor correspondente
 deque **ler_csv(deque **matriz, int altura, int largura, FILE *arquivo)
 {
     char *linha;
@@ -95,12 +99,12 @@ deque **ler_csv(deque **matriz, int altura, int largura, FILE *arquivo)
     {
         for (int num_coluna = 0; num_coluna < largura; num_coluna++)
         {
-            fscanf(arquivo, " %m[^,\n]%*[,\n]", &linha);
-            token = strtok(linha, " ");
+            fscanf(arquivo, " %m[^,\n]%*[,\n]", &linha);//pego entre virgulas ou \n
+            token = strtok(linha, " ");//pego tudo menos espaço
             while (token != NULL)
             {
                 inserir_lista_final(token, &(matriz[num_linha][num_coluna]));
-                token = strtok(NULL, " ");
+                token = strtok(NULL, " ");//avanço com token
             }
             free(linha);
         }
@@ -117,7 +121,7 @@ int eh_letra(char c)
         return 1;
     return 0;
 }
-
+// Função que resolve as formulas com pilha (vetores)
 Resultado resolver_pilha(p_no inicio, deque **matriz)
 {
     Pilha *valores = nova_pilha();
@@ -167,29 +171,29 @@ Resultado resolver_pilha(p_no inicio, deque **matriz)
     destruir_pilha(operadores);
     return rv;
 }
-
+//Função que verifica caso a caso das possiblidades da celula
 Resultado ler_celula(char *coordenada, deque **matriz)
 {
-    char x_letra[2];
+    char x_letra[MAX_LETRA];
     int x, y;
-    sscanf(coordenada, " %[A-Z]%d", x_letra, &y);
+    sscanf(coordenada, " %[A-Z]%d", x_letra, &y);//divido a coordenada
     x = x_letra[0] - 'A';
     y -= 1;
-    if (matriz[y][x].visitando)
+    if (matriz[y][x].visitando)//verifico ciclo
     {
         return ERRO;
     }
 
     p_no inicio = matriz[y][x].ini;
-    if (inicio->token[0] == '=')
+    if (inicio->token[0] == '=')//formula
     {
 
-        matriz[y][x].visitando = true;
+        matriz[y][x].visitando = true;//marco como visitado
         Resultado rv = resolver_pilha(inicio, matriz);
-        matriz[y][x].visitando = false;
+        matriz[y][x].visitando = false;//desmarco
         return rv;
     }
-    else
+    else//numero normal
     {
         Resultado rv;
         sscanf(inicio->token, "%d", &rv.resultado);
@@ -197,21 +201,21 @@ Resultado ler_celula(char *coordenada, deque **matriz)
         return rv;
     }
 }
-
+//Função que retorna o valor antigo e modifica para o atual
 char *alterar(char *coordenada, char *alterando, deque **matriz)
 {
     char x_letra[2];
     char *rv;
     rv = malloc(5 * sizeof(char));
     int x, y;
-    sscanf(coordenada, " %[A-Z]%d", x_letra, &y);
+    sscanf(coordenada, " %[A-Z]%d", x_letra, &y);//pego da string a letra o numereo
     x = x_letra[0] - 'A';
     y -= 1;
     strcpy(rv, matriz[y][x].ini->token);
     strcpy(matriz[y][x].ini->token, alterando);
     return rv;
 }
-
+//Função que libera do inicio a lista
 void liberar_lista(p_no lista)
 {
     p_no aux;
@@ -222,7 +226,7 @@ void liberar_lista(p_no lista)
         free(aux);
     }
 }
-
+// Função que libvera primeiro cada lista ligada e depois a matriz
 void liberar_matriz(deque **M, int altura, int largura)
 {
     for (int i = 0; i < altura; i++)
